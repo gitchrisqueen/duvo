@@ -72,19 +72,38 @@ record_evidence() {
   printf '| %s | %s | %s |\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$status" "$detail" >>"$log"
 }
 
-runner() {
-  if have uv; then
-    printf 'uv run'
-  else
-    printf 'python -m'
-  fi
-}
+# Interpreter used when uv is not available. The smoke test deliberately needs
+# nothing but the standard library, so that it exercises the same path a
+# reviewer takes rather than one that only works inside a development
+# environment.
+if have python3; then
+  PYTHON_BIN="$(command -v python3)"
+elif have python; then
+  PYTHON_BIN="$(command -v python)"
+else
+  PYTHON_BIN=""
+fi
+export PYTHON_BIN
 
-# uv run <args>, falling back to the active interpreter when uv is absent.
+# Run a project command. With uv present this resolves inside the project
+# environment; without it, the command is run directly, which is what makes the
+# container-only path work with no development tooling installed.
 py() {
   if have uv; then
     uv run "$@"
-  else
-    python -m "$@"
+    return
   fi
+
+  local command="$1"
+  shift
+  case "$command" in
+  python | python3)
+    [[ -n "$PYTHON_BIN" ]] || die "No Python interpreter found on PATH."
+    "$PYTHON_BIN" "$@"
+    ;;
+  *)
+    have "$command" || die "$command is not available, and uv is not installed."
+    "$command" "$@"
+    ;;
+  esac
 }

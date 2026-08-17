@@ -38,6 +38,16 @@ except Exception as exc:  # noqa: BLE001
 PYTHON
 }
 
+# Returns just the status code. Piping http() into `head -1` closes the pipe
+# after the first line, so the Python process dies with BrokenPipeError while
+# writing the body. Capturing the whole output and slicing it in the shell
+# avoids the pipe entirely.
+http_status() {
+  local output
+  output="$(http "$@")"
+  printf '%s' "${output%%$'\n'*}"
+}
+
 check() {
   local label="$1" expected="$2" actual="$3"
   checks=$((checks + 1))
@@ -50,7 +60,7 @@ check() {
 }
 
 step "upstream is reachable"
-status="$(http GET "$BASE_URL/__health" | head -1)"
+status="$(http_status GET "$BASE_URL/__health")"
 check "mock upstream answers its health endpoint" "200" "$status"
 
 if [[ "$status" != "200" ]]; then
@@ -61,22 +71,22 @@ fi
 key="$(cat "$KEY_FILE")"
 
 step "authentication is enforced"
-status="$(http GET "$BASE_URL/examples" "wrong-key" | head -1)"
+status="$(http_status GET "$BASE_URL/examples" "wrong-key")"
 check "a wrong key is rejected" "401" "$status"
 
-status="$(http GET "$BASE_URL/examples" "$key" | head -1)"
+status="$(http_status GET "$BASE_URL/examples" "$key")"
 check "the correct key is accepted" "200" "$status"
 
 step "unknown identifiers are rejected rather than invented"
-status="$(http GET "$BASE_URL/examples/does-not-exist" "$key" | head -1)"
+status="$(http_status GET "$BASE_URL/examples/does-not-exist" "$key")"
 check "an unknown record returns not found" "404" "$status"
 
-status="$(http GET "$BASE_URL/no-such-collection" "$key" | head -1)"
+status="$(http_status GET "$BASE_URL/no-such-collection" "$key")"
 check "an unknown collection returns not found" "404" "$status"
 
 step "the upstream is not idempotent, which is why the server must be"
-first="$(http POST "$BASE_URL/examples" "$key" '{"name":"smoke"}' | head -1)"
-second="$(http POST "$BASE_URL/examples" "$key" '{"name":"smoke"}' | head -1)"
+first="$(http_status POST "$BASE_URL/examples" "$key" '{"name":"smoke"}')"
+second="$(http_status POST "$BASE_URL/examples" "$key" '{"name":"smoke"}')"
 check "the first write is created" "201" "$first"
 check "an identical second write is also created upstream" "201" "$second"
 
@@ -90,14 +100,14 @@ cp "$KEY_FILE" "${KEY_FILE}.smoke-backup"
 printf '%s' "$rotated" >"${KEY_FILE}.new"
 mv "${KEY_FILE}.new" "$KEY_FILE"
 
-status="$(http GET "$BASE_URL/examples" "$rotated" | head -1)"
+status="$(http_status GET "$BASE_URL/examples" "$rotated")"
 check "the rotated key is accepted with no restart" "200" "$status"
 
-status="$(http GET "$BASE_URL/examples" "$key" | head -1)"
+status="$(http_status GET "$BASE_URL/examples" "$key")"
 check "the previous key stops working" "401" "$status"
 
 mv "${KEY_FILE}.smoke-backup" "$KEY_FILE"
-status="$(http GET "$BASE_URL/examples" "$key" | head -1)"
+status="$(http_status GET "$BASE_URL/examples" "$key")"
 check "the original key works again after restoring it" "200" "$status"
 
 # --- The service container -------------------------------------------------
