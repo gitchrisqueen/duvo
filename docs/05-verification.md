@@ -193,3 +193,13 @@ command that actually ran, when it ran, and what it returned.
 | 2026-08-17T17:57:57Z | PASS | full verification sweep completed in 20s (3 stages skipped) |
 | 2026-08-17T18:00:29Z | PASS | unit suite green in 1956ms |
 | 2026-08-17T18:00:29Z | PASS | prose guard clean across 39 documents |
+| 2026-08-17T18:00:35Z | PASS | prose guard clean across 39 documents |
+| 2026-08-17T18:00:35Z | PASS | lint, types, compression scope, and prose checks clean |
+| 2026-08-17T18:00:38Z | PASS | full suite green, critical path at or above 90% |
+| 2026-08-17T18:00:52Z | PASS | security sweep clean (gitleaks, bandit, dependency audit) |
+| 2026-08-17T18:00:52Z | SKIP | container stages did not run: Docker unavailable on this machine |
+| 2026-08-17T18:00:53Z | PASS | prose guard clean across 39 documents |
+| 2026-08-17T18:00:55Z | PASS | every documented command executed successfully |
+| 2026-08-17T18:00:56Z | PASS | full verification sweep completed in 21s (3 stages skipped) |
+| 2026-08-17T18:01:50Z | PASS | unit suite green in 1936ms |
+| 2026-08-17T18:01:50Z | PASS | prose guard clean across 39 documents |

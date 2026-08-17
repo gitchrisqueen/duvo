@@ -14,10 +14,10 @@ matter.
 | | |
 | --- | --- |
 | Branch | `claude/interview-project-setup-541dyg` |
-| Commit | `209dbd2` |
+| Commit | `cf57df8` |
 | Tests | 83 |
 | Coverage | 84% |
-| Last verified | 2026-08-17T18:00:29Z |
+| Last verified | 2026-08-17T18:01:50Z |
 
 This table is written by `scripts/update_readme.sh` from what actually ran. It
 is never edited by hand.
