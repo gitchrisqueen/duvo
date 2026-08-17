@@ -1,0 +1,16 @@
+{
+  "_comment": [
+    "Fixtures served by the mock upstream. Collections are replaced with data",
+    "drawn from the task brief during the exercise. The placeholder collection",
+    "below exists so that the compose stack and the smoke test have something",
+    "real to exercise before any domain code is written.",
+    "",
+    "Keep fixtures honest: only include fields the real upstream documents.",
+    "Inventing a convenient field here is how code ends up reading something",
+    "the live API never returns."
+  ],
+  "examples": [
+    { "id": "example-1", "name": "First example", "value": 10 },
+    { "id": "example-2", "name": "Second example", "value": 20 }
+  ]
+}

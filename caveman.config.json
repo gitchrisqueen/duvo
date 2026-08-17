@@ -1,0 +1,42 @@
+{
+  "_purpose": "Token reduction for agent runs. Compression exists to make code generation and command output cheap. It never applies to documentation.",
+
+  "_documentation_rule": "Every Markdown file in this repository is read by a reviewer and later presented to a chief technology officer and a chief executive. Compressed prose in a document is a defect. The exclusions below are one of five independent guards; see docs/04-operations.md for the others, and tools/prose_guard.py for the one that fails the build.",
+
+  "telemetry": false,
+
+  "proxy": {
+    "enabled": false,
+    "_reason": "Routing provider traffic through a local proxy adds a failure mode with no recovery path in the middle of a timed session. The skill and the shrink command are used on their own."
+  },
+
+  "pixel": {
+    "enabled": false,
+    "pixel_models": [],
+    "_reason": "Rendering dense text to images is an unnecessary variable during a recorded session."
+  },
+
+  "exclude": [
+    "**/*.md",
+    "**/*.rst",
+    "**/*.txt",
+    "docs/**",
+    "README*",
+    "DEPLOYMENT*",
+    "CLAUDE.md",
+    ".github/**/*.md",
+    ".claude/**/*.md",
+    "COMMIT_EDITMSG",
+    "**/PULL_REQUEST_TEMPLATE*"
+  ],
+
+  "include": [
+    "src/**/*.py",
+    "tests/**/*.py",
+    "tools/**/*.py"
+  ],
+
+  "_shrink_rule": "The shrink command wraps a COMMAND so that its output is smaller on the way into an agent's context. It is never applied to file contents, and never to anything a human reads. scripts/lint.sh enforces this on the scripts themselves.",
+
+  "_disable": "Set CAVEMAN_DISABLE=1 to remove compression from every script with no other behavioural change. The scaffold does not depend on this tool."
+}

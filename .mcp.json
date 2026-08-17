@@ -1,0 +1,13 @@
+{
+  "_comment": "Client registration for the tool server. The command is replaced during the exercise once the transport exists. scripts/mcp_check.sh probes this configuration directly over JSON-RPC, without an assistant in the loop.",
+  "mcpServers": {
+    "duvo-fde": {
+      "command": "REPLACE_ME",
+      "args": [],
+      "env": {
+        "DUVO_SECRETS_DIR": "./secrets",
+        "DUVO_LOG_FORMAT": "json"
+      }
+    }
+  }
+}

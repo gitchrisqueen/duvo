@@ -1,0 +1,36 @@
+# Keep the build context tiny. A large context costs seconds on every build and
+# lets unrelated file changes invalidate layers.
+.git
+.github
+.claude
+.venv
+venv
+__pycache__
+*.py[cod]
+*.egg-info
+dist
+build
+
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage*
+htmlcov
+coverage.xml
+.codeql
+
+tests
+docs
+scripts
+*.md
+!README.md
+
+.env
+.env.*
+!.env.example
+secrets
+*.pem
+*.key
+
+.refkit*
+refkit
