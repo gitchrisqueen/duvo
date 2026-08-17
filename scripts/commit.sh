@@ -37,5 +37,35 @@ fi
 scripts/update_readme.sh >/dev/null
 git add -A
 
+previous_sha="$(git rev-parse HEAD 2>/dev/null || echo none)"
 git commit -m "$message"
+new_sha="$(git rev-parse HEAD)"
+
+# The verification sweep stamps the commit it verified, and then refreshes the
+# generated status block and evidence log. Committing those regenerated files
+# would otherwise invalidate the stamp and block the next push over changes that
+# contain no source at all. Carry the stamp forward, but only when the commit
+# really did touch nothing but generated files.
+stamp_dir="$REPO_ROOT/.claude/state"
+if [[ -f "$stamp_dir/verified-$previous_sha" ]]; then
+  changed="$(git diff --name-only "$previous_sha" "$new_sha")"
+  generated_only=1
+  while IFS= read -r file; do
+    [[ -z "$file" ]] && continue
+    case "$file" in
+    README.md | docs/05-verification.md) ;;
+    *)
+      generated_only=0
+      break
+      ;;
+    esac
+  done <<<"$changed"
+
+  if ((generated_only == 1)); then
+    mkdir -p "$stamp_dir"
+    touch "$stamp_dir/verified-$new_sha"
+    ok "carried the verification stamp forward: this commit only regenerated status files"
+  fi
+fi
+
 ok "committed: $message"
