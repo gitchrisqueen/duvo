@@ -33,6 +33,9 @@ dev = [
     "bandit>=1.7",
     "pip-audit>=2.7",
     "detect-secrets>=1.5",
+    # Installed here rather than fetched separately, so that `make setup`
+    # installs the commit gate deterministically from the lock file.
+    "pre-commit>=4.0",
 ]
 
 [build-system]
