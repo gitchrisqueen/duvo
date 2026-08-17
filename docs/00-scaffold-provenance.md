@@ -42,6 +42,39 @@ the thing this repository spends considerable effort preventing everywhere else.
 Stating it plainly costs nothing and is consistent with how everything else here
 is documented.
 
+## What the gates caught while this was being built
+
+Worth recording, because it is the argument for the gates existing at all. Four
+real defects were found in the scaffold itself before any human looked at it,
+and none of them would have been visible from reading the code.
+
+1. **A test that passed locally and failed in continuous integration.** The
+   provider reported a credential file as healthy after read access was lost,
+   because the file's identity had not changed so it was never re-read. The
+   local run was as root, and root can read a file whatever its mode, so the
+   test was skipped. The next rotation would have failed silently, which is the
+   exact problem the module exists to prevent. Both the code and the test were
+   corrected, and the new test fakes read access instead of relying on file
+   permissions so that it holds for any user.
+
+2. **A container stack that could not start.** The images built correctly, and
+   the server exited immediately because the placeholder entry point printed a
+   message and returned. `docker compose up --wait` fails on a container that is
+   already gone. The placeholder now stays alive and reports its state honestly.
+
+3. **A smoke test that broke outside a development environment.** A shell helper
+   fell back to `python -m python` when `uv` was absent, which is precisely the
+   situation in the container job. Found only because the smoke test runs where
+   a reviewer would run it, not only where it was written.
+
+4. **A broken pipe in the same smoke test.** Reading only the status line by
+   piping into `head -1` closed the pipe underneath the process still writing the
+   body. Found by running the script against a live upstream rather than reading
+   it.
+
+The first three were found by continuous integration. The fourth was found by
+executing the script. Not one of them would have been caught by review.
+
 ## Is preparation reasonable?
 
 I think so, and it is worth saying why rather than assuming agreement.
