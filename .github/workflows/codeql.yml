@@ -20,6 +20,11 @@ concurrency:
 jobs:
   analyse:
     name: analyse python
+    # Code scanning needs GitHub Advanced Security, which a private repository
+    # on this plan does not have. Skipping is the honest option: the job then
+    # reports as skipped rather than passing without having analysed anything,
+    # and it starts running by itself the moment the repository is public.
+    if: github.event.repository.visibility == 'public'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:

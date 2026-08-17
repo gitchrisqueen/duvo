@@ -34,6 +34,7 @@ See ``docs/04-operations.md`` for the rotation runbook.
 from __future__ import annotations
 
 import logging
+import os
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -173,7 +174,17 @@ class SecretsProvider:
             return
 
         if self._identities.get(name) == identity:
-            self._degraded.discard(name)
+            # The file has not changed, so the value we hold is still current
+            # and there is nothing to re-read. Readability is still worth
+            # checking: a credential file that has become unreadable will
+            # silently fail to pick up the *next* rotation, and a silent
+            # rotation failure is the exact problem this module exists to
+            # prevent. Reporting it as degraded surfaces it while the service
+            # keeps working.
+            if os.access(path, os.R_OK):
+                self._degraded.discard(name)
+            else:
+                self._mark_degraded(name, reason="file is no longer readable")
             return
 
         try:
@@ -214,7 +225,14 @@ class SecretsProvider:
             name: Secret name.
             reason: Why the read failed. Logged, never returned to a caller.
         """
+        already_degraded = name in self._degraded
         self._degraded.add(name)
+
+        # Log the transition, not every access. This check runs on every read,
+        # and a warning per request would bury the one that matters.
+        if already_degraded:
+            return
+
         _LOGGER.warning(
             "Secret source unreadable; continuing on last known good value."
             if name in self._values

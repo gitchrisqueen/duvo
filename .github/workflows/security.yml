@@ -23,6 +23,11 @@ jobs:
     name: secret scanning
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: read
+      # gitleaks reads the pull request's commits to scan exactly what changed.
+      # Without this it fails on the API call rather than on a finding.
+      pull-requests: read
     steps:
       - uses: actions/checkout@v4
         with:
@@ -70,7 +75,10 @@ jobs:
 
   dependency-review:
     name: dependency review
-    if: github.event_name == 'pull_request'
+    # Like code scanning, this needs Advanced Security and is unavailable on a
+    # private repository. It skips rather than pretending to have reviewed
+    # anything, and runs by itself once the repository is public.
+    if: github.event_name == 'pull_request' && github.event.repository.visibility == 'public'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:

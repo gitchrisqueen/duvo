@@ -132,6 +132,34 @@ def test_registers_rotated_values_for_redaction(
     assert "rotated-value-5678" not in scrubbed
 
 
+def test_an_unchanged_but_unreadable_file_is_reported_as_degraded(
+    secrets_dir: Path, frozen_clock: FrozenClock, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Losing read access is a problem even when the file has not changed.
+
+    The identity of the file is the same, so there is nothing to re-read and the
+    value we hold is still correct. The next rotation, however, would fail to
+    apply and would do so silently, which is the failure this module exists to
+    prevent. It is reported as degraded while the service keeps working.
+
+    Read access is faked rather than changed on disk so that this holds
+    regardless of which user runs the suite. Root can read a file whatever its
+    mode, which is exactly how this defect survived a local test run.
+    """
+    write_secret(secrets_dir, "upstream_api_key", "initial-value-1234")
+    provider = SecretsProvider(secrets_dir, clock=frozen_clock)
+    assert provider.get("upstream_api_key") == "initial-value-1234"
+    assert provider.state("upstream_api_key").degraded is False
+
+    monkeypatch.setattr("duvo_fde.secrets_provider.os.access", lambda *_args, **_kwargs: False)
+
+    state = provider.state("upstream_api_key")
+
+    assert state.available is True
+    assert state.degraded is True
+    assert provider.get("upstream_api_key") == "initial-value-1234"
+
+
 @pytest.mark.skipif(os.geteuid() == 0, reason="root can read files regardless of mode")
 def test_permission_error_degrades_rather_than_fails(
     secrets_dir: Path, frozen_clock: FrozenClock
