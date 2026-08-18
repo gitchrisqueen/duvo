@@ -16,7 +16,7 @@ dependencies = [
 
 [project.optional-dependencies]
 # The mock upstream service used by docker compose and the smoke test.
-mock = ["fastapi>=0.115", "uvicorn[standard]>=0.32"]
+mock = ["fastapi>=0.115", "uvicorn[standard]>=0.52.3"]
 
 [project.scripts]
 duvo-fde = "duvo_fde.__main__:main"
