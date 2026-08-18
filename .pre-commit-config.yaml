@@ -1,0 +1,72 @@
+# The commit-time gate. Tiered deliberately: fast checks here, heavier checks
+# before a push, heaviest in continuous integration. Committing has to stay
+# something you do often rather than something you avoid.
+#
+# Budget for this whole file: under ten seconds.
+
+default_install_hook_types: [pre-commit, pre-push]
+default_stages: [pre-commit]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-json
+        exclude: ^\.mcp\.json$|^caveman\.config\.json$
+      - id: check-toml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: detect-private-key
+      - id: no-commit-to-branch
+        args: [--branch, main]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.3
+    hooks:
+      - id: ruff-format
+      - id: ruff-check
+        args: [--fix]
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.2
+    hooks:
+      - id: gitleaks
+
+  - repo: local
+    hooks:
+      # Unit tests run at commit time, as they should: a change that breaks a
+      # test is not ready to be recorded. This stays honest only because the
+      # suite is under five seconds and continuous integration fails above ten.
+      - id: fast-tests
+        name: fast unit suite
+        entry: uv run pytest -q -x -m "not slow"
+        language: system
+        pass_filenames: false
+        types: [python]
+
+      # Documentation is written for a reviewer, so it is never compressed.
+      # This is one of five independent guards; see docs/04-operations.md.
+      - id: prose-guard
+        name: documentation reads as full English
+        entry: uv run python -m tools.prose_guard
+        language: system
+        files: \.md$
+        exclude: ^tests/fixtures/
+
+      - id: types
+        name: mypy
+        entry: uv run mypy
+        language: system
+        pass_filenames: false
+        types: [python]
+        stages: [pre-push]
+
+      - id: documented-commands
+        name: documented commands still work
+        entry: scripts/verify_docs.sh
+        language: system
+        pass_filenames: false
+        stages: [pre-push]

@@ -1,0 +1,48 @@
+name: codeql
+
+# CodeQL takes minutes on Python rather than seconds, which is why it lives here
+# rather than in the fast local sweep. The local equivalents are semgrep and
+# bandit; see docs/03-security.md, which says so plainly rather than implying
+# that this runs quickly on a laptop.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  schedule:
+    - cron: "23 4 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyse:
+    name: analyse python
+    # Code scanning needs GitHub Advanced Security, which a private repository
+    # on this plan does not have. Skipping is the honest option: the job then
+    # reports as skipped rather than passing without having analysed anything,
+    # and it starts running by itself the moment the repository is public.
+    if: github.event.repository.visibility == 'public'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialise CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python
+          queries: security-and-quality
+
+      - name: Analyse
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: /language:python

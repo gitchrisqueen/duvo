@@ -1,0 +1,77 @@
+# Local stack: the tool server plus a stand-in for the customer's upstream.
+#
+# Note the secrets mount on both services. It mounts the DIRECTORY, never an
+# individual file. Bind-mounting a single file pins its inode inside the
+# container, so a rotation performed on the host is never observed at all and
+# the service keeps serving a stale credential while reporting itself healthy.
+# See docs/04-operations.md for the rotation runbook.
+
+name: duvo-fde
+
+services:
+  mock-upstream:
+    build:
+      context: .
+      target: mock
+      cache_from:
+        - duvo-fde-mock:local
+    image: duvo-fde-mock:local
+    environment:
+      MOCK_UPSTREAM_FIXTURES: /app/fixtures/upstream.json
+      MOCK_UPSTREAM_API_KEY_FILE: /run/secrets/upstream_api_key
+    volumes:
+      - ./secrets:/run/secrets:ro
+      - ./fixtures:/app/fixtures:ro
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8080/__health', timeout=2).status == 200 else 1)"
+      interval: 3s
+      timeout: 2s
+      retries: 10
+      start_period: 3s
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+  server:
+    build:
+      context: .
+      target: runtime
+      cache_from:
+        - duvo-fde:local
+    image: duvo-fde:local
+    depends_on:
+      mock-upstream:
+        condition: service_healthy
+    environment:
+      DUVO_UPSTREAM_BASE_URL: http://mock-upstream:8080
+      DUVO_SECRETS_DIR: /run/secrets
+      DUVO_AUDIT_LOG_PATH: /app/var/audit.log
+      DUVO_LOG_FORMAT: json
+      DUVO_LOG_LEVEL: INFO
+    volumes:
+      # Directory mount, so rotation is observable. Read-only: the service
+      # never writes a credential.
+      - ./secrets:/run/secrets:ro
+      - audit:/app/var
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    stdin_open: true
+    tty: false
+
+volumes:
+  audit:

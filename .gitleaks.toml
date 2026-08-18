@@ -1,0 +1,42 @@
+# Secret scanning configuration.
+#
+# The extended rule catches the shape of key this project actually uses, so a
+# real credential accidentally written into the repository is caught by its own
+# format rather than only by a generic entropy check.
+
+title = "duvo-fde"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "duvo-upstream-key"
+description = "Upstream API key belonging to this project"
+regex = '''(?i)\b(duvo[_-]?(api[_-]?)?key|upstream[_-]?api[_-]?key)\s*[:=]\s*['\"]?[A-Za-z0-9._\-]{16,}'''
+tags = ["key", "duvo"]
+
+[allowlist]
+description = "Paths and values that are deliberately not secrets"
+
+paths = [
+  '''\.venv/''',
+  '''uv\.lock''',
+  '''\.secrets\.baseline''',
+  '''tests/fixtures/''',
+  # The example environment file documents variable names, never values.
+  '''\.env\.example''',
+]
+
+regexes = [
+  # Placeholders in documentation and configuration.
+  '''REPLACE_ME''',
+  '''your-key-here''',
+  '''<[A-Za-z-]+>''',
+  # Values written by tests and by bootstrap for local development only. They
+  # are generated on the machine, never shared, and never reach the upstream.
+  '''dev-[a-f0-9]{32}''',
+  '''ci-[a-f0-9]{32}''',
+  '''initial-value-1234''',
+  '''rotated-value-5678''',
+  '''super-secret-value-123''',
+]
