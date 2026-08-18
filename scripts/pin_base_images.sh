@@ -11,9 +11,14 @@ OUTPUT="${OUTPUT:-.env.images}"
 have docker || die "Docker is required to resolve digests."
 docker info >/dev/null 2>&1 || die "The Docker daemon is not reachable."
 
-declare -A images=(
-  [PYTHON_IMAGE]="python:3.12-slim"
-  [UV_IMAGE]="ghcr.io/astral-sh/uv:0.5.11"
+# A plain indexed array of "NAME=reference" pairs rather than an associative
+# array: `declare -A` does not exist in bash 3.2, which is what macOS ships
+# unmodified since 2007 (Apple froze it there over the GPLv3 license change).
+# This scaffold has to run on the machine you record from, so every script in
+# it targets bash 3.2 rather than assuming a modern bash is installed.
+images=(
+  "PYTHON_IMAGE=python:3.12-slim"
+  "UV_IMAGE=ghcr.io/astral-sh/uv:0.5.11"
 )
 
 : >"$OUTPUT"
@@ -22,8 +27,9 @@ declare -A images=(
   echo "# Pass to the build with: docker build \$(scripts/docker_build.sh --print-args)"
 } >>"$OUTPUT"
 
-for name in "${!images[@]}"; do
-  reference="${images[$name]}"
+for entry in "${images[@]}"; do
+  name="${entry%%=*}"
+  reference="${entry#*=}"
   step "resolving ${reference}"
   docker pull --quiet "$reference" >/dev/null
   digest="$(docker inspect --format='{{index .RepoDigests 0}}' "$reference")"

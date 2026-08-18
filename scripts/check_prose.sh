@@ -11,7 +11,12 @@
 # than assumed.
 source "$(dirname "${BASH_SOURCE[0]}")/_lib.sh"
 
-mapfile -t documents < <(
+# A `while read` loop rather than `mapfile`, which does not exist before bash
+# 4.0 and so is not available on stock macOS bash (frozen at 3.2 since 2007).
+documents=()
+while IFS= read -r document_line; do
+  [[ -n "$document_line" ]] && documents+=("$document_line")
+done < <(
   if [[ $# -gt 0 ]]; then
     printf '%s\n' "$@"
   else
@@ -24,7 +29,9 @@ mapfile -t documents < <(
 )
 
 filtered=()
-for document in "${documents[@]}"; do
+# The `[@]+` form guards against an empty `documents` array, which otherwise
+# throws "unbound variable" under `set -u` on bash before 4.4.
+for document in "${documents[@]+"${documents[@]}"}"; do
   # The terse fixture exists precisely to fail this check, and is asserted on
   # by the unit tests instead.
   [[ "$document" == *"tests/fixtures/terse_example.md" ]] && continue

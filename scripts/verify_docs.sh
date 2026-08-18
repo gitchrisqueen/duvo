@@ -14,7 +14,12 @@ if [[ "${DOC_VERIFIER_ACTIVE:-0}" == "1" ]]; then
   exit 0
 fi
 
-mapfile -t documents < <(
+# A `while read` loop rather than `mapfile`, which does not exist before bash
+# 4.0 and so is not available on stock macOS bash (frozen at 3.2 since 2007).
+documents=()
+while IFS= read -r document_line; do
+  [[ -n "$document_line" ]] && documents+=("$document_line")
+done < <(
   if [[ $# -gt 0 ]]; then
     printf '%s\n' "$@"
   else
