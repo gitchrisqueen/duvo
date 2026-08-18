@@ -24,6 +24,26 @@ die()   { fail "$*"; exit 1; }
 have() { command -v "$1" >/dev/null 2>&1; }
 
 # ---------------------------------------------------------------------------
+# Portability: target bash 3.2, not whatever bash wrote this.
+#
+# macOS ships bash 3.2.57 unmodified on every release since 2007, because
+# Apple stopped updating it over the GPLv3 license change. Any script tested
+# only against a modern bash (this repo's dev sandbox runs 5.2) can break on
+# the exact machine a session gets recorded from. Two traps, both real bugs
+# hit while building this scaffold:
+#
+#   1. `declare -A` (associative arrays) does not exist before bash 4.0.
+#      Use a plain indexed array of "key=value" strings instead, split with
+#      `${entry%%=*}` / `${entry#*=}`.
+#   2. `mapfile`/`readarray` do not exist before bash 4.0. Use a
+#      `while IFS= read -r line; do arr+=("$line"); done < <(...)` loop.
+#   3. Expanding a possibly-empty array as `"${arr[@]}"` throws "unbound
+#      variable" under `set -u` on any bash before 4.4 — bash 3.2 included.
+#      Use `"${arr[@]+"${arr[@]}"}"` instead, or guard with
+#      `((${#arr[@]} > 0))` before the expansion.
+# ---------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
 # Token reduction.
 #
 # shrink wraps a COMMAND so its output is compressed before it reaches an

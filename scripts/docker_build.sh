@@ -19,7 +19,7 @@ if [[ -f .env.images ]]; then
 fi
 
 if [[ "${1:-}" == "--print-args" ]]; then
-  printf '%s ' "${build_args[@]}"
+  printf '%s ' "${build_args[@]+"${build_args[@]}"}"
   exit 0
 fi
 
@@ -27,14 +27,18 @@ export DOCKER_BUILDKIT=1
 
 start=$(date +%s%N)
 step "building runtime image"
-shrink docker build "${build_args[@]}" \
+# The `[@]+"${...[@]}"` form, not a plain `"${build_args[@]}"`, because
+# build_args is often empty and bash before 4.4 (which is to say, stock macOS
+# bash) throws "unbound variable" expanding an empty array under `set -u`.
+# See scripts/_lib.sh for the general note on this.
+shrink docker build "${build_args[@]+"${build_args[@]}"}" \
   --target runtime \
   --cache-from duvo-fde:local \
   --tag duvo-fde:local \
   .
 
 step "building mock upstream image"
-shrink docker build "${build_args[@]}" \
+shrink docker build "${build_args[@]+"${build_args[@]}"}" \
   --target mock \
   --cache-from duvo-fde-mock:local \
   --tag duvo-fde-mock:local \
