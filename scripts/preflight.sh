@@ -68,8 +68,18 @@ prefer "the pre-brief tag exists" bash -c 'git rev-parse pre-brief >/dev/null 2>
 step "quality gates"
 require "fast test suite is green" scripts/test.sh
 require "documentation prose guard is green" scripts/check_prose.sh
-require "the prose guard rejects compressed prose" bash -c \
-  'py python -m tools.prose_guard tests/fixtures/terse_example.md >/dev/null 2>&1; [[ $? -eq 1 ]]'
+
+# `py` is a shell function defined by _lib.sh, sourced into THIS process. A
+# freshly spawned `bash -c` subshell does not inherit it, so this check has to
+# be a real function called directly, not a subshell string — otherwise "py"
+# resolves to nothing and the check fails with exit 127 regardless of what the
+# guard itself actually returns.
+prose_guard_rejects_the_terse_fixture() {
+  py python -m tools.prose_guard tests/fixtures/terse_example.md >/dev/null 2>&1
+  [[ $? -eq 1 ]]
+}
+require "the prose guard rejects compressed prose" prose_guard_rejects_the_terse_fixture
+
 require "documented commands still work" scripts/verify_docs.sh
 
 step "token reduction"
