@@ -15,7 +15,7 @@ from typing import Any
 
 from duvo_fde.credentials import resolve_store_key
 from duvo_fde.domain import policy
-from duvo_fde.errors import InvalidRequestError, UnknownEntityError
+from duvo_fde.errors import DuvoError, InvalidRequestError, UnknownEntityError
 from duvo_fde.runtime import Runtime
 from duvo_fde.storelink import StoreLinkClient
 
@@ -159,7 +159,18 @@ class BuyerService:
             )
 
         quantity = decision.order_quantity_units
-        assert quantity is not None
+        if quantity is None:  # pragma: no cover - the policy always sets one here
+            # An assertion would be stripped under python -O, and a missing
+            # quantity would then reach the deduplication key as "qty=None",
+            # which would deduplicate two genuinely different orders against
+            # each other. This is an invariant of the policy, so it is a defect
+            # in this server rather than anything the caller can correct.
+            raise DuvoError(
+                f"This server measured that store {position.store_id} requires an order "
+                f"for stock keeping unit {position.sku} but produced no quantity, so no "
+                "order was raised. Report this to the Duvo team.",
+                details={"store_id": position.store_id, "sku": position.sku},
+            )
         ordering_date = self._ordering_date(store)
         request_key = replenishment_idempotency_key(
             store_id=position.store_id,
