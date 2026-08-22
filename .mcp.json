@@ -1,12 +1,19 @@
 {
-  "_comment": "Client registration for the tool server. The command is replaced during the exercise once the transport exists. scripts/mcp_check.sh probes this configuration directly over JSON-RPC, without an assistant in the loop.",
+  "_comment": "Client registration for the tool server. scripts/mcp_check.sh probes this configuration directly over JSON-RPC, without an assistant in the loop, so the command here is the same command a client launches. The interpreter is named explicitly rather than wrapped, because a wrapper is one more process that can write to standard output and corrupt the protocol stream.",
   "mcpServers": {
     "duvo-fde": {
-      "command": "REPLACE_ME",
-      "args": [],
+      "command": ".venv/bin/python",
+      "args": [
+        "-m",
+        "duvo_fde",
+        "serve",
+        "--stdio"
+      ],
       "env": {
         "DUVO_SECRETS_DIR": "./secrets",
-        "DUVO_LOG_FORMAT": "json"
+        "DUVO_LOG_FORMAT": "json",
+        "DUVO_UPSTREAM_BASE_URL": "http://localhost:8080",
+        "DUVO_AUDIT_LOG_PATH": "./audit.log"
       }
     }
   }

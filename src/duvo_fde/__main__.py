@@ -1,10 +1,15 @@
 """Command line entry point.
 
 Subcommands:
-    ``serve``   Run the tool server. Until a transport is wired against the task
-                brief, this runs a placeholder that stays alive and reports
-                ready, so that the container stack, the smoke test, and the
-                demonstration are all exercisable before any domain code exists.
+    ``serve``   Hold the process open and report ready. This is what the
+                container runs, so that the stack, the smoke test and the
+                health check all keep working.
+    ``serve --stdio``
+                Run the real tool server over standard input and output. This is
+                what an assistant client launches. It is a separate mode rather
+                than the default because a tool server speaking over standard
+                input exits as soon as it reads end of input, which would stop
+                the container the moment it started.
     ``health``  Print the liveness and readiness payloads as JSON. Used by the
                 container health check and by ``scripts/smoke.sh``.
     ``config``  Print the resolved configuration with no secret values.
@@ -22,7 +27,7 @@ from types import FrameType
 from duvo_fde.log import configure_logging
 from duvo_fde.runtime import Runtime, build_runtime
 
-__all__ = ["main", "serve"]
+__all__ = ["main", "serve", "serve_stdio"]
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -41,7 +46,35 @@ def _build_parser() -> argparse.ArgumentParser:
         default="health",
         help="Action to perform. Defaults to 'health'.",
     )
+    parser.add_argument(
+        "--stdio",
+        action="store_true",
+        help="Run the tool server over standard input and output.",
+    )
     return parser
+
+
+def serve_stdio(runtime: Runtime) -> int:
+    """Run the tool server over standard input and output.
+
+    Logging is already directed to standard error, which matters here: anything
+    written to standard output that is not a protocol message corrupts the
+    stream and the client sees a handshake failure rather than a log line.
+
+    Args:
+        runtime: The assembled runtime.
+
+    Returns:
+        Process exit code.
+    """
+    from duvo_fde.mcp_server import build_server
+
+    _LOGGER.info(
+        "Starting the tool server over standard input and output.",
+        extra={"fields": {"upstream": runtime.settings.upstream_base_url}},
+    )
+    build_server(runtime).run("stdio")
+    return 0
 
 
 def serve(runtime: Runtime, *, stop: threading.Event | None = None) -> int:
@@ -107,6 +140,8 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if ready else 1
 
     configure_logging(level=runtime.settings.log_level, fmt=runtime.settings.log_format)
+    if args.stdio:
+        return serve_stdio(runtime)
     return serve(runtime)
 
 

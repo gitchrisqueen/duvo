@@ -1,17 +1,36 @@
-"""Domain logic written against the task brief.
+"""Korral's business rules.
 
-This package is intentionally empty in the scaffold. Everything here is written
-during the exercise, once the brief is known.
-
-Two rules govern what belongs in this package:
-
-1. **Calculations and business rules live here, on the server.** They are
-   deterministic, unit tested, and never delegated to a language model. A model
-   that is asked to do arithmetic or apply a threshold will eventually get it
-   wrong, silently, on one input out of a hundred.
-2. **A fixed business rule is never exposed as a caller-tunable parameter.** If
-   the brief states a rule, it is a constant in this package, not an argument a
-   caller can override.
+Every calculation and every threshold in this package is deterministic and runs
+on the server. Nothing here is delegated to a model, and no fixed business rule
+stated in the brief is exposed as something a caller can change.
 """
 
-__all__: list[str] = []
+from duvo_fde.domain.policy import (
+    POS_WINDOW_HOURS,
+    REPLENISHMENT_GAP_THRESHOLD_UNITS,
+    ReplenishmentDecision,
+    StockAssessment,
+    StockPosition,
+    assess,
+    compute_gap_units,
+    exceeds_threshold,
+    order_quantity_units_for_gap,
+    pos_window,
+    validate_sku,
+    validate_store_id,
+)
+
+__all__ = [
+    "POS_WINDOW_HOURS",
+    "REPLENISHMENT_GAP_THRESHOLD_UNITS",
+    "ReplenishmentDecision",
+    "StockAssessment",
+    "StockPosition",
+    "assess",
+    "compute_gap_units",
+    "exceeds_threshold",
+    "order_quantity_units_for_gap",
+    "pos_window",
+    "validate_sku",
+    "validate_store_id",
+]

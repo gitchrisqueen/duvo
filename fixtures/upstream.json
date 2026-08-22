@@ -10,7 +10,243 @@
     "the live API never returns."
   ],
   "examples": [
-    { "id": "example-1", "name": "First example", "value": 10 },
-    { "id": "example-2", "name": "Second example", "value": 20 }
-  ]
+    {
+      "id": "example-1",
+      "name": "First example",
+      "value": 10
+    },
+    {
+      "id": "example-2",
+      "name": "Second example",
+      "value": 20
+    }
+  ],
+  "stores": [
+    {
+      "id": "47",
+      "store_id": "47",
+      "name": "Korral Praha Vinohrady",
+      "timezone": "Europe/Prague",
+      "region": "CZ"
+    },
+    {
+      "id": "102",
+      "store_id": "102",
+      "name": "Korral Brno Kralovo Pole",
+      "timezone": "Europe/Prague",
+      "region": "CZ"
+    }
+  ],
+  "skus": [
+    {
+      "id": "8847291",
+      "sku": "8847291",
+      "name": "Madeta butter 250g",
+      "category": "Chilled dairy",
+      "supplier_id": "SUP-2210"
+    },
+    {
+      "id": "9910002",
+      "sku": "9910002",
+      "name": "Korral oat drink 1l",
+      "category": "Chilled dairy",
+      "supplier_id": "SUP-2210"
+    }
+  ],
+  "suppliers": [
+    {
+      "id": "SUP-2210",
+      "supplier_id": "SUP-2210",
+      "name": "Madeta a.s.",
+      "lead_time_days": 2
+    }
+  ],
+  "inventory": [
+    {
+      "id": "47:8847291",
+      "store_id": "47",
+      "sku": "8847291",
+      "on_hand_units": 12
+    },
+    {
+      "id": "102:8847291",
+      "store_id": "102",
+      "sku": "8847291",
+      "on_hand_units": 26
+    },
+    {
+      "id": "47:9910002",
+      "store_id": "47",
+      "sku": "9910002",
+      "on_hand_units": 0
+    }
+  ],
+  "pos": [
+    {
+      "id": "p1",
+      "store_id": "47",
+      "sku": "8847291",
+      "units": 8,
+      "sold_at_minutes_ago": 45,
+      "basket_id": "B-99121",
+      "loyalty_id": "L-4471",
+      "cashier_id": "E-231",
+      "unit_price_eur": 2.19
+    },
+    {
+      "id": "p2",
+      "store_id": "47",
+      "sku": "8847291",
+      "units": 6,
+      "sold_at_minutes_ago": 120,
+      "basket_id": "B-99122",
+      "loyalty_id": "L-4472",
+      "cashier_id": "E-232",
+      "unit_price_eur": 2.19
+    },
+    {
+      "id": "p3",
+      "store_id": "47",
+      "sku": "8847291",
+      "units": 5,
+      "sold_at_minutes_ago": 300,
+      "basket_id": "B-99123",
+      "loyalty_id": "L-4473",
+      "cashier_id": "E-233",
+      "unit_price_eur": 2.19
+    },
+    {
+      "id": "p4",
+      "store_id": "47",
+      "sku": "8847291",
+      "units": 4,
+      "sold_at_minutes_ago": 610,
+      "basket_id": "B-99124",
+      "loyalty_id": "L-4474",
+      "cashier_id": "E-234",
+      "unit_price_eur": 2.19
+    },
+    {
+      "id": "p5",
+      "store_id": "47",
+      "sku": "8847291",
+      "units": 5,
+      "sold_at_minutes_ago": 900,
+      "basket_id": "B-99125",
+      "loyalty_id": "L-4475",
+      "cashier_id": "E-235",
+      "unit_price_eur": 2.19
+    },
+    {
+      "id": "p6",
+      "store_id": "47",
+      "sku": "8847291",
+      "units": 3,
+      "sold_at_minutes_ago": 1350,
+      "basket_id": "B-99126",
+      "loyalty_id": "L-4476",
+      "cashier_id": "E-236",
+      "unit_price_eur": 2.19
+    },
+    {
+      "id": "p7",
+      "store_id": "47",
+      "sku": "8847291",
+      "units": 40,
+      "sold_at_minutes_ago": 1500,
+      "basket_id": "B-99180",
+      "loyalty_id": "L-4480",
+      "cashier_id": "E-238",
+      "unit_price_eur": 2.19
+    },
+    {
+      "id": "p10",
+      "store_id": "102",
+      "sku": "8847291",
+      "units": 7,
+      "sold_at_minutes_ago": 60,
+      "basket_id": "B-881210",
+      "loyalty_id": "L-33710",
+      "cashier_id": "E-5110",
+      "unit_price_eur": 2.19
+    },
+    {
+      "id": "p11",
+      "store_id": "102",
+      "sku": "8847291",
+      "units": 6,
+      "sold_at_minutes_ago": 200,
+      "basket_id": "B-881211",
+      "loyalty_id": "L-33711",
+      "cashier_id": "E-5111",
+      "unit_price_eur": 2.19
+    },
+    {
+      "id": "p12",
+      "store_id": "102",
+      "sku": "8847291",
+      "units": 5,
+      "sold_at_minutes_ago": 380,
+      "basket_id": "B-881212",
+      "loyalty_id": "L-33712",
+      "cashier_id": "E-5112",
+      "unit_price_eur": 2.19
+    },
+    {
+      "id": "p13",
+      "store_id": "102",
+      "sku": "8847291",
+      "units": 4,
+      "sold_at_minutes_ago": 700,
+      "basket_id": "B-881213",
+      "loyalty_id": "L-33713",
+      "cashier_id": "E-5113",
+      "unit_price_eur": 2.19
+    },
+    {
+      "id": "p14",
+      "store_id": "102",
+      "sku": "8847291",
+      "units": 4,
+      "sold_at_minutes_ago": 950,
+      "basket_id": "B-881214",
+      "loyalty_id": "L-33714",
+      "cashier_id": "E-5114",
+      "unit_price_eur": 2.19
+    },
+    {
+      "id": "p15",
+      "store_id": "102",
+      "sku": "8847291",
+      "units": 3,
+      "sold_at_minutes_ago": 1200,
+      "basket_id": "B-881215",
+      "loyalty_id": "L-33715",
+      "cashier_id": "E-5115",
+      "unit_price_eur": 2.19
+    },
+    {
+      "id": "p16",
+      "store_id": "102",
+      "sku": "8847291",
+      "units": 3,
+      "sold_at_minutes_ago": 1400,
+      "basket_id": "B-881216",
+      "loyalty_id": "L-33716",
+      "cashier_id": "E-5116",
+      "unit_price_eur": 2.19
+    },
+    {
+      "id": "p20",
+      "store_id": "102",
+      "sku": "8847291",
+      "units": 50,
+      "sold_at_minutes_ago": 2000,
+      "basket_id": "B-88190",
+      "loyalty_id": "L-3390",
+      "cashier_id": "E-519",
+      "unit_price_eur": 2.19
+    }
+  ],
+  "replenishment": []
 }
