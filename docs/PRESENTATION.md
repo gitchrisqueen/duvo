@@ -59,3 +59,29 @@ Say it, unprompted:
 
 > Appended as you build. One short paragraph per slice: what it does, and why it
 > is built this way.
+
+### Slice four: the deployment document and the demonstration proof
+
+This slice covers requirements R16, R17 and R21, and it also produced the
+evidence for R3 and R4. `DEPLOYMENT.md` now answers the six things Korral's
+information technology team asked for, in their words rather than ours: where
+this runs and why it has no choice, how it gets there, how secrets are handled
+including both failure paths they said they would judge, who owns the pipeline,
+how a fix ships at eleven at night, and what we want confirmed before day one.
+The ownership split is the part worth defending out loud. Duvo owns the pipeline
+and Korral owns the runtime and the credentials, which means Duvo can ship a fix
+without waking a Korral engineer and still never holds a StoreLink key. Those two
+properties normally trade against each other, and separating the artifact's
+lifecycle from the credential's is what buys both.
+
+`scripts/demo_proof.sh` exists because a demonstration that prints is not a
+demonstration that proves. It asserts every outcome rather than displaying it,
+so store 47 ordering nineteen units, store 102 being refused at exactly the
+threshold, the retry deduplicating, the unconfigured store failing closed and the
+malformed identifier being rejected are all pass or fail rather than something a
+viewer has to read carefully. Writing it caught a real defect in itself: the
+first version happily reused a stale mock left running from an earlier session,
+so the run was exercising a process the script had not started and could not
+vouch for. It now refuses to continue if anything is already holding the port and
+checks that the mock begins with no orders on record, which is the difference
+between evidence and a screenshot.

@@ -226,3 +226,5 @@ command that actually ran, when it ran, and what it returned.
 | 2026-08-22T17:15:15Z | PASS | prose guard clean across 39 documents |
 | 2026-08-22T17:15:16Z | PASS | prose guard clean across 39 documents |
 | 2026-08-22T17:15:20Z | PASS | every documented command executed successfully |
+| 2026-08-22T18:08:22Z | PASS | buyer task completed end to end: store 47 ordered, store 102 refused at exactly the threshold, retry deduplicated, store 999 failed closed |
+| 2026-08-22T18:09:17Z | PASS | buyer task completed end to end: store 47 ordered, store 102 refused at exactly the threshold, retry deduplicated, store 999 failed closed |
