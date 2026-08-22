@@ -218,3 +218,38 @@ command that actually ran, when it ran, and what it returned.
 | 2026-08-18T18:18:56Z | PASS | lint, types, compression scope, and prose checks clean |
 | 2026-08-18T18:19:22Z | PASS | unit suite green in 2077ms |
 | 2026-08-18T18:19:22Z | PASS | prose guard clean across 39 documents |
+| 2026-08-22T17:08:58Z | PASS | unit suite green in 3175ms |
+| 2026-08-22T17:08:58Z | PASS | prose guard clean across 39 documents |
+| 2026-08-22T17:09:00Z | PASS | prose guard clean across 39 documents |
+| 2026-08-22T17:09:03Z | PASS | every documented command executed successfully |
+| 2026-08-22T17:15:14Z | PASS | unit suite green in 3010ms |
+| 2026-08-22T17:15:15Z | PASS | prose guard clean across 39 documents |
+| 2026-08-22T17:15:16Z | PASS | prose guard clean across 39 documents |
+| 2026-08-22T17:15:20Z | PASS | every documented command executed successfully |
+| 2026-08-22T18:08:22Z | PASS | buyer task completed end to end: store 47 ordered, store 102 refused at exactly the threshold, retry deduplicated, store 999 failed closed |
+| 2026-08-22T18:09:17Z | PASS | buyer task completed end to end: store 47 ordered, store 102 refused at exactly the threshold, retry deduplicated, store 999 failed closed |
+| 2026-08-22T18:16:05Z | PASS | buyer task completed end to end: store 47 ordered, store 102 refused at exactly the threshold, retry deduplicated, store 999 failed closed |
+| 2026-08-22T18:22:37Z | PASS | unit suite green in 3593ms |
+| 2026-08-22T18:25:05Z | PASS | tool server completed the protocol handshake and advertised its tools |
+| 2026-08-22T18:25:27Z | PASS | buyer task completed end to end: store 47 ordered, store 102 refused at exactly the threshold, retry deduplicated, store 999 failed closed |
+| 2026-08-22T18:25:49Z | PASS | prose guard clean across 39 documents |
+| 2026-08-22T18:25:49Z | PASS | lint, types, compression scope, and prose checks clean |
+| 2026-08-22T18:29:39Z | PASS | tool server completed the protocol handshake and advertised its tools |
+| 2026-08-22T18:29:46Z | PASS | prose guard clean across 39 documents |
+| 2026-08-22T18:29:46Z | PASS | lint, types, compression scope, and prose checks clean |
+| 2026-08-22T18:38:56Z | PASS | unit suite green in 4181ms |
+| 2026-08-22T18:39:54Z | PASS | prose guard clean across 39 documents |
+| 2026-08-22T18:39:54Z | PASS | lint, types, compression scope, and prose checks clean |
+| 2026-08-22T18:40:01Z | PASS | full suite green, critical path at or above 90% |
+| 2026-08-22T18:40:41Z | FAIL | security sweep reported 1 failing checks |
+| 2026-08-22T18:41:31Z | PASS | prose guard clean across 39 documents |
+| 2026-08-22T18:41:31Z | PASS | lint, types, compression scope, and prose checks clean |
+| 2026-08-22T18:41:38Z | PASS | full suite green, critical path at or above 90% |
+| 2026-08-22T18:42:05Z | PASS | security sweep clean (gitleaks, bandit, dependency audit) |
+| 2026-08-22T18:42:28Z | PASS | images built in 21860ms |
+| 2026-08-22T18:42:31Z | PASS | images built in 1535ms |
+| 2026-08-22T18:42:43Z | PASS | docker compose stack healthy |
+| 2026-08-22T18:46:17Z | PASS | prose guard clean across 39 documents |
+| 2026-08-22T18:46:23Z | PASS | every documented command executed successfully |
+| 2026-08-22T18:47:04Z | PASS | prose guard clean across 39 documents |
+| 2026-08-22T18:47:09Z | PASS | every documented command executed successfully |

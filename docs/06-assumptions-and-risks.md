@@ -38,6 +38,34 @@ somewhere durable is a deployment concern and is not solved here.
 | A degraded dependency triggers restarts | Low | Outage from a recoverable state | Liveness and readiness are separate |
 
 ## Deferred
+### Deferred during this session
+
+Parked deliberately rather than forgotten. Each is small, each is understood, and
+none of them changes an ordering decision.
+
+- **Store local timestamps in the audit trail.** The ordering date is already
+  computed in the store's timezone, so the deduplication key is correct across a
+  trading day. The audit line still records coordinated universal time, which is
+  right but harder for a buyer in Prague to reason about at nine in the morning.
+- **The supplier lead time and product name on every response.** Both are
+  fetched and the lead time is deliberately kept out of the trigger arithmetic.
+  Folding them into the read tool's response as context is presentation, not
+  behaviour.
+- **Unit tests for the client's rejected credential paths.** The rotation and
+  revocation logic is implemented and exercised end to end by
+  `scripts/demo_proof.sh` and by the live rotation in `scripts/smoke.sh`, but it
+  does not yet have its own fast tests driving a rejected credential directly.
+  This is the most valuable of the deferred items.
+- **A streamable HTTP transport.** One transport proven on camera is worth more
+  than two claimed. It is an argument to `run` rather than a rewrite, and it is
+  on the day one confirmation list because the answer depends on where Korral
+  runs the agent.
+- **Deduplication across replicas.** In process today, which is correct for the
+  single replica the pilot assumes and stated plainly rather than hidden.
+- **An idempotency key honoured by StoreLink itself.** Without one, a write that
+  fails ambiguously cannot be made safe from this side of the wire. Named as the
+  second question for Korral rather than papered over.
+
 
 Ideas that arrived while building and were parked rather than implemented.
 Parking them is the point: an idea implemented mid-slice is an idea that was

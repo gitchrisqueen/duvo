@@ -76,12 +76,14 @@ def test_a_server_without_a_command_is_rejected(tmp_path: Path) -> None:
         read_server_command(config)
 
 
-def test_the_repository_configuration_still_holds_its_placeholder() -> None:
-    """The placeholder is replaced during the exercise.
+def test_the_repository_configuration_launches_this_repositorys_tool_server() -> None:
+    """The client registration must launch this repository's own tool server.
 
-    If this ever fails, either the transport has been wired, in which case
-    update this test, or the file has been corrupted.
+    This replaces the scaffold's placeholder assertion. It stays valuable: it is
+    the only check that catches an edit to the client registration that breaks
+    the launch command, which is a failure a reviewer would otherwise meet for
+    the first time when their client refuses to connect.
     """
-    config = Path(__file__).resolve().parents[1] / ".mcp.json"
-
-    assert read_server_command(config) == ["REPLACE_ME"]
+    command = read_server_command(Path(".mcp.json"))
+    assert command[0].endswith("python")
+    assert command[1:] == ["-m", "duvo_fde", "serve", "--stdio"]
