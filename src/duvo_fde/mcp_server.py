@@ -21,6 +21,7 @@ from collections.abc import Callable
 from typing import Any
 
 from mcp.server.mcpserver import MCPServer
+from mcp.server.mcpserver.exceptions import ToolError
 from mcp_types import ToolAnnotations
 
 from duvo_fde.errors import DuvoError
@@ -220,6 +221,22 @@ def _invoke(tool: str, work: Callable[[str], dict[str, Any]]) -> dict[str, Any]:
     safe to hand to a model. The correlation identifier is carried into that
     message too, because the case where correlation matters most is the failure.
 
+    The typed error is translated into the protocol library's own ``ToolError``
+    here, at the transport boundary and nowhere else. The reason is not tidiness.
+    A library that catches an unrecognised exception is entitled to decide the
+    message is an internal detail and replace it, and version 2.1.1 does exactly
+    that: the caller receives "Error executing tool check_stock_position" and
+    nothing else. Raising the library's own error type is how this server says
+    that the message was written for the caller on purpose. This was observed
+    over the wire with ``tools/mcp_probe --call`` on both versions rather than
+    inferred, because an in-process test sees the exception and never sees what
+    the client is actually handed.
+
+    The domain and service layers are untouched by this. They keep raising
+    ``DuvoError``, so the typed error remains the vocabulary everywhere inside
+    the service, and ``duvo_fde.errors`` still imports nothing from the protocol
+    library.
+
     Args:
         tool: The tool name, for the diagnostic log.
         work: A callable taking the correlation identifier and returning the
@@ -229,8 +246,9 @@ def _invoke(tool: str, work: Callable[[str], dict[str, Any]]) -> dict[str, Any]:
         The tool result.
 
     Raises:
-        DuvoError: Whatever the service raised, with the correlation identifier
-            appended to its caller safe message.
+        ToolError: Carrying the caller safe message the service raised, with the
+            correlation identifier appended. ``details`` is deliberately not
+            included: it goes to the redacting logger and nowhere else.
     """
     correlation_id = new_correlation_id()
     _LOGGER.info(
@@ -251,9 +269,7 @@ def _invoke(tool: str, work: Callable[[str], dict[str, Any]]) -> dict[str, Any]:
                 }
             },
         )
-        raise type(exc)(
-            f"{exc.safe_message} Correlation id: {correlation_id}.", details=exc.details
-        ) from exc
+        raise ToolError(f"{exc.safe_message} Correlation id: {correlation_id}.") from exc
     _LOGGER.info(
         "Tool call finished.",
         extra={"fields": {"correlation_id": correlation_id, "tool": tool, "result": "ok"}},
