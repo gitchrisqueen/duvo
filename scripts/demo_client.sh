@@ -108,6 +108,35 @@ status_none="$(curl -s -o /dev/null -w '%{http_code}' \
 [ "$status_none" = "401" ] || die "An unauthenticated request was accepted (got ${status_none})."
 ok "an unauthenticated request returns 401"
 
+step "Checking that no other copy of this repository holds different keys"
+# The trap this catches, because it has already happened once. .mcp.json sets
+# DUVO_SECRETS_DIR to ./secrets, which is relative to the directory the CLIENT
+# is launched from, while DUVO_UPSTREAM_BASE_URL is absolute. Start the client
+# from a git worktree under .claude/worktrees and the tool server reads that
+# worktree's keys and sends them to the mock this script started, which only
+# knows the keys beside it. Every call then fails with a 401 that reads as a
+# revoked credential, and the demonstration looks broken when it is not.
+conflicting=0
+for other_secrets in .claude/worktrees/*/secrets; do
+  [ -d "$other_secrets" ] || continue
+  for store in 47 102; do
+    other_key="${other_secrets}/korral_store_key_${store}"
+    [ -f "$other_key" ] || continue
+    # Compared by digest so that no key value is printed, here or anywhere.
+    if [ "$(shasum -a 256 "$other_key" | cut -d' ' -f1)" \
+       != "$(shasum -a 256 "secrets/korral_store_key_${store}" | cut -d' ' -f1)" ]; then
+      warn "${other_key} holds a DIFFERENT key for store ${store}."
+      conflicting=1
+    fi
+  done
+done
+if [ "$conflicting" = "1" ]; then
+  warn "A client started from that directory will fail every call with a 401."
+  warn "Start it from ${PWD} instead."
+else
+  ok "no other copy of this repository holds a conflicting key"
+fi
+
 step "Completing a handshake and real tool calls against the tool server"
 DUVO_UPSTREAM_BASE_URL="$BASE" scripts/mcp_check.sh --min-tools 3 \
   || die "The tool server did not answer correctly. Do not attach a client yet."
@@ -115,6 +144,15 @@ DUVO_UPSTREAM_BASE_URL="$BASE" scripts/mcp_check.sh --min-tools 3 \
 cat <<BANNER
 
 $(printf '%s' "${C_BOLD}${C_GREEN}")Ready. Leave this terminal running for the whole take.${C_RESET}
+
+$(printf '%s' "${C_BOLD}")Start your client from this exact directory:${C_RESET}
+  cd ${PWD} && claude
+
+  This matters more than it looks. .mcp.json points the tool server at
+  ./secrets, which is relative to wherever the client was launched, while the
+  upstream address is absolute. A client started somewhere else reads a
+  different secrets directory and every call fails with a 401 that reads as a
+  revoked credential rather than as a wrong directory.
 
 $(printf '%s' "${C_BOLD}")Before recording, in this order:${C_RESET}
   1. Stop this script with control-C. It refuses to start while the port is held.
