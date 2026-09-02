@@ -32,6 +32,31 @@ else
 fi
 chmod 600 secrets/upstream_api_key 2>/dev/null || true
 
+# The per-store StoreLink keys. These are created here rather than only in the
+# demonstration script because DEPLOYMENT.md tells a reviewer to run
+# scripts/demo_proof.sh, and that script requires them. A reviewer who clones
+# this repository must be able to reach a working demonstration without being
+# told a secret value by a human.
+#
+# Two stores, matching the buyer task in the brief. Store 999 is deliberately
+# absent: the fail-closed path is demonstrated by a store this server holds no
+# key for, so creating one here would quietly delete that demonstration.
+for store in 47 102; do
+  key_file="secrets/korral_store_key_${store}"
+  if [[ ! -f "$key_file" ]]; then
+    py python -c "import secrets as s, pathlib, sys; pathlib.Path(sys.argv[1]).write_text('dev-store-' + s.token_hex(16))" "$key_file"
+    ok "wrote a local development key for store ${store} (value never printed)"
+  else
+    ok "${key_file} already exists"
+  fi
+  chmod 600 "$key_file" 2>/dev/null || true
+done
+
+if [[ -f secrets/korral_store_key_999 ]]; then
+  warn "secrets/korral_store_key_999 exists. The fail-closed demonstration needs"
+  warn "a store this server holds no key for. Remove it before demonstrating."
+fi
+
 # --- Secret scanning -------------------------------------------------------
 if ! have gitleaks; then
   warn "gitleaks is not installed. Install it so the commit gate can scan offline:"
