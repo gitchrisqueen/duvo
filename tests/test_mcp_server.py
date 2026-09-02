@@ -14,12 +14,14 @@ still finishes in milliseconds.
 from __future__ import annotations
 
 import asyncio
+import re
 from pathlib import Path
 from typing import Any
 
 import pytest
 from mcp.server.mcpserver.exceptions import ToolError
 
+from duvo_fde.errors import DuvoError
 from duvo_fde.mcp_server import SERVER_NAME, build_server, new_correlation_id
 from duvo_fde.runtime import Runtime
 
@@ -152,3 +154,46 @@ def test_a_malformed_identifier_is_refused_before_anything_is_read(runtime: Runt
 def test_an_unknown_tool_name_is_refused(runtime: Runtime) -> None:
     with pytest.raises(ToolError):
         _call(runtime, "delete_everything", {"store_id": "47"})
+
+
+def test_a_typed_error_reaches_the_caller_as_the_protocol_librarys_own_error(
+    runtime: Runtime,
+) -> None:
+    # This is a regression test for a defect that no other test in this file
+    # could see. Every test here calls the server in process and therefore
+    # catches an exception, whereas a real client receives whatever the protocol
+    # library chose to put in the result. A library that catches an exception it
+    # does not recognise may replace the message with a generic one, and version
+    # 2.1.1 does: the caller is handed "Error executing tool
+    # check_stock_position" and the remediation is gone. Raising the library's
+    # own error type is how this server states that the message was written for
+    # the caller deliberately.
+    #
+    # The behaviour over the wire is checked by tools/mcp_probe --call, which is
+    # the only place it can honestly be checked. This test pins the boundary
+    # contract that makes it work, so that removing the translation fails here
+    # rather than in front of a customer.
+    with pytest.raises(ToolError) as caught:
+        _call(runtime, "check_stock_position", {"store_id": "999", "sku": "8847291"})
+
+    assert type(caught.value).__module__.startswith("mcp.")
+    assert not isinstance(caught.value, DuvoError)
+    assert "No StoreLink credential is configured for store 999" in str(caught.value)
+    assert "Correlation id:" in str(caught.value)
+
+
+def test_the_caller_sees_the_safe_message_and_nothing_appended_to_it(runtime: Runtime) -> None:
+    # Every typed error carries two halves: a safe_message written for an
+    # external audience, and structured details that may hold an upstream
+    # response body and are meant for the redacting logger alone. The boundary
+    # builds the caller facing message from the first half only, and this pins
+    # that shape: the safe message, then the correlation identifier, then
+    # nothing. A details dictionary appended by a future change would fail here.
+    with pytest.raises(ToolError) as caught:
+        _call(runtime, "check_stock_position", {"store_id": "../etc", "sku": "8847291"})
+
+    message = str(caught.value)
+
+    assert "one to ten digits" in message
+    assert re.fullmatch(r".+ Correlation id: [0-9a-f]{12}\.", message)
+    assert "{" not in message

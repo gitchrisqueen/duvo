@@ -125,8 +125,15 @@ Hooks are advisory, one-shot, and guarded by sentinels so they cannot loop.
 Slash commands: `/brief`, `/slice`, `/verify`, `/walkthrough`, `/finalize`.
 
 Before attaching any client to the tool server, run `scripts/mcp_check.sh`. It
-completes the protocol handshake over raw JSON-RPC. Debugging a transport
+completes the protocol handshake over raw JSON-RPC and, when an upstream is
+serving, makes real tool calls and asserts on the results. Debugging a transport
 through a language model is the slowest route to an answer that exists.
+
+A handshake alone is a weak check: it passes against a server whose every tool
+call would fail, and it cannot see the error message a client is actually
+handed, because the in-process tests catch an exception while a client receives
+whatever the protocol library decided to put in the result. `--call` is the only
+place that difference is observable, and it has caught a real one.
 
 ## What already exists, so do not rebuild it
 

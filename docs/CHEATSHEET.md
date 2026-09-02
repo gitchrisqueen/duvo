@@ -23,7 +23,9 @@ make lint      format, types, prose  make verify   everything, one verdict
 make sec       security sweep        make ship     push and open the pull request
 make clock     the timer             make down     stop the stack
 
-scripts/mcp_check.sh    probe the transport before attaching a client
+scripts/mcp_check.sh    handshake, and real tool calls when an upstream is up
+scripts/demo_client.sh  bring the stack up for a live assistant, then block
+scripts/demo_audit.sh   read the audit trail, prove no key is in it
 scripts/commit.sh "feat(scope): message"
 scripts/walkthrough.sh  rehearse the demonstration
 scripts/finalize.sh     after the recording stops

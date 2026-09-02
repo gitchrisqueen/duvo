@@ -76,7 +76,23 @@ timed() {
 # Append a line to the machine-written verification evidence log.
 # Evidence is only ever written by scripts, never by hand, so that the log
 # reflects commands that actually ran.
+#
+# DUVO_EVIDENCE_SUPPRESS=1 runs the check and writes no row. It exists for one
+# caller: the pre-push hook. That hook runs scripts/verify_docs.sh, which
+# recorded a row every time, which meant the hook always modified a tracked
+# file, which meant pre-commit always failed the push. The gate could therefore
+# never pass on its own, and the history contains two commits whose only purpose
+# was to absorb rows the failed push had written.
+#
+# Suppressing the row does not suppress the check. A documented command that
+# stops working still fails the push, which is the whole point of the gate. The
+# row is redundant in that one position because make verify recorded the same
+# result moments earlier, and a log where the same line repeats hundreds of
+# times is harder to read as evidence, not easier.
 record_evidence() {
+  if [[ "${DUVO_EVIDENCE_SUPPRESS:-0}" == "1" ]]; then
+    return 0
+  fi
   local status="$1" detail="$2"
   local log="$REPO_ROOT/docs/05-verification.md"
   mkdir -p "$(dirname "$log")"
