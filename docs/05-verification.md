@@ -282,3 +282,24 @@ command that actually ran, when it ran, and what it returned.
 | 2026-09-02T19:26:55Z | PASS | security sweep clean (gitleaks, bandit, dependency audit) |
 | 2026-09-02T19:27:10Z | PASS | images built in 12469ms |
 | 2026-09-02T19:27:14Z | PASS | images built in 2678ms |
+| 2026-09-02T19:38:11Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T19:38:11Z | PASS | lint, types, compression scope, and prose checks clean |
+| 2026-09-02T19:38:26Z | PASS | full suite green, critical path at or above 90% |
+| 2026-09-02T19:39:23Z | PASS | security sweep clean (gitleaks, bandit, dependency audit) |
+| 2026-09-02T19:39:25Z | SKIP | container stages did not run: Docker unavailable on this machine |
+| 2026-09-02T19:39:31Z | PASS | tool server completed the protocol handshake and advertised its tools (tool calls not exercised) |
+| 2026-09-02T19:39:36Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T19:39:53Z | PASS | every documented command executed successfully |
+| 2026-09-02T19:40:02Z | PASS | full verification sweep completed in 115s (3 stages skipped) |
+| 2026-09-02T19:53:37Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T19:53:37Z | PASS | lint, types, compression scope, and prose checks clean |
+| 2026-09-02T19:53:49Z | PASS | full suite green, critical path at or above 90% |
+| 2026-09-02T19:54:29Z | PASS | security sweep clean (gitleaks, bandit, dependency audit) |
+| 2026-09-02T19:54:36Z | PASS | images built in 5233ms |
+| 2026-09-02T19:54:38Z | PASS | images built in 1406ms |
+| 2026-09-02T19:54:52Z | PASS | docker compose stack healthy |
+| 2026-09-02T19:54:56Z | PASS | smoke test: 11 of 11 checks passed against the running stack |
+| 2026-09-02T19:54:59Z | PASS | tool server completed the handshake and answered real tool calls correctly over the wire |
+| 2026-09-02T19:55:02Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T19:55:13Z | PASS | every documented command executed successfully |
+| 2026-09-02T19:55:19Z | PASS | full verification sweep completed in 106s (0 stages skipped) |
