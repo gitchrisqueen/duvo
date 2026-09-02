@@ -341,6 +341,42 @@ audit trail and checks that neither store key appears anywhere in it. It is
 marked as unverified above only because it binds a port, which continuous
 integration already covers through the container job.
 
+## Driving the buyer task from a real assistant
+
+The script above proves the task. This brings the same task up so that an
+assistant can complete it through a Model Context Protocol client, which is a
+different demonstration: a model chooses the tool calls, and the server refuses
+the ones Korral's policy does not permit.
+
+<!-- verify: skip -->
+```bash
+scripts/demo_client.sh
+```
+
+It confirms the per-store credentials, refuses to start if anything already
+holds the port, rotates any previous audit trail aside, starts the mock
+StoreLink with its key directory pointed at this repository rather than at the
+container path, asserts per-store key scoping over HTTP, and then runs
+`scripts/mcp_check.sh`, which completes a handshake **and makes real tool
+calls**. It then blocks, because the mock has to stay up for the whole session,
+and prints the instruction to give the assistant. Marked as unverified above
+because it binds a port and does not return.
+
+The credential story matters here. Deduplication is held in process and the
+mock holds orders in memory, so a rehearsal leaves state in both. Stop the
+script, restart the assistant's session, and start it again before any run that
+has to show a first order as newly created rather than as a replay.
+
+Afterwards, read what the buyer would read:
+
+<!-- verify: skip -->
+```bash
+scripts/demo_audit.sh
+```
+
+That prints the audit trail in plain language and then checks it for every
+store key this repository holds, without printing any of their values.
+
 ## Ownership
 
 Who owns what after handover is set out in `docs/04-operations.md`, along with a

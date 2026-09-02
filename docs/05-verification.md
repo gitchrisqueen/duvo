@@ -253,3 +253,57 @@ command that actually ran, when it ran, and what it returned.
 | 2026-08-22T18:46:23Z | PASS | every documented command executed successfully |
 | 2026-08-22T18:47:04Z | PASS | prose guard clean across 39 documents |
 | 2026-08-22T18:47:09Z | PASS | every documented command executed successfully |
+| 2026-09-02T18:42:33Z | PASS | tool server completed the handshake and answered real tool calls correctly over the wire |
+| 2026-09-02T18:44:07Z | PASS | tool server completed the handshake and answered real tool calls correctly over the wire |
+| 2026-09-02T18:44:07Z | PASS | demonstration environment came up clean: per-store scoping asserted, handshake and real tool calls answered correctly |
+| 2026-09-02T18:44:26Z | PASS | buyer task completed end to end: store 47 ordered, store 102 refused at exactly the threshold, retry deduplicated, store 999 failed closed |
+| 2026-09-02T18:49:52Z | PASS | buyer task completed end to end: store 47 ordered, store 102 refused at exactly the threshold, retry deduplicated, store 999 failed closed |
+| 2026-09-02T18:50:26Z | PASS | unit suite green in 8424ms |
+| 2026-09-02T18:51:25Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T18:51:25Z | PASS | lint, types, compression scope, and prose checks clean |
+| 2026-09-02T18:51:56Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T18:52:03Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T18:52:14Z | PASS | every documented command executed successfully |
+| 2026-09-02T18:53:15Z | PASS | security sweep clean (gitleaks, bandit, dependency audit) |
+| 2026-09-02T18:54:09Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T18:54:09Z | PASS | lint, types, compression scope, and prose checks clean |
+| 2026-09-02T18:54:23Z | PASS | full suite green, critical path at or above 90% |
+| 2026-09-02T18:55:12Z | PASS | security sweep clean (gitleaks, bandit, dependency audit) |
+| 2026-09-02T19:05:13Z | PASS | prose guard clean across 1 documents |
+| 2026-09-02T19:05:50Z | PASS | prose guard clean across 1 documents |
+| 2026-09-02T19:06:16Z | PASS | prose guard clean across 1 documents |
+| 2026-09-02T19:21:05Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T19:21:05Z | PASS | lint, types, compression scope, and prose checks clean |
+| 2026-09-02T19:21:22Z | PASS | full suite green, critical path at or above 90% |
+| 2026-09-02T19:22:31Z | PASS | security sweep clean (gitleaks, bandit, dependency audit) |
+| 2026-09-02T19:25:35Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T19:25:35Z | PASS | lint, types, compression scope, and prose checks clean |
+| 2026-09-02T19:25:51Z | PASS | full suite green, critical path at or above 90% |
+| 2026-09-02T19:26:55Z | PASS | security sweep clean (gitleaks, bandit, dependency audit) |
+| 2026-09-02T19:27:10Z | PASS | images built in 12469ms |
+| 2026-09-02T19:27:14Z | PASS | images built in 2678ms |
+| 2026-09-02T19:38:11Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T19:38:11Z | PASS | lint, types, compression scope, and prose checks clean |
+| 2026-09-02T19:38:26Z | PASS | full suite green, critical path at or above 90% |
+| 2026-09-02T19:39:23Z | PASS | security sweep clean (gitleaks, bandit, dependency audit) |
+| 2026-09-02T19:39:25Z | SKIP | container stages did not run: Docker unavailable on this machine |
+| 2026-09-02T19:39:31Z | PASS | tool server completed the protocol handshake and advertised its tools (tool calls not exercised) |
+| 2026-09-02T19:39:36Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T19:39:53Z | PASS | every documented command executed successfully |
+| 2026-09-02T19:40:02Z | PASS | full verification sweep completed in 115s (3 stages skipped) |
+| 2026-09-02T19:53:37Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T19:53:37Z | PASS | lint, types, compression scope, and prose checks clean |
+| 2026-09-02T19:53:49Z | PASS | full suite green, critical path at or above 90% |
+| 2026-09-02T19:54:29Z | PASS | security sweep clean (gitleaks, bandit, dependency audit) |
+| 2026-09-02T19:54:36Z | PASS | images built in 5233ms |
+| 2026-09-02T19:54:38Z | PASS | images built in 1406ms |
+| 2026-09-02T19:54:52Z | PASS | docker compose stack healthy |
+| 2026-09-02T19:54:56Z | PASS | smoke test: 11 of 11 checks passed against the running stack |
+| 2026-09-02T19:54:59Z | PASS | tool server completed the handshake and answered real tool calls correctly over the wire |
+| 2026-09-02T19:55:02Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T19:55:13Z | PASS | every documented command executed successfully |
+| 2026-09-02T19:55:19Z | PASS | full verification sweep completed in 106s (0 stages skipped) |
+| 2026-09-02T19:58:33Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T19:58:47Z | PASS | every documented command executed successfully |
+| 2026-09-02T20:00:38Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T20:00:55Z | PASS | every documented command executed successfully |
