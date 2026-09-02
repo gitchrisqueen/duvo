@@ -26,6 +26,10 @@ secrets/*
 *.pem
 *.key
 audit.log
+# scripts/demo_client.sh rotates the trail aside before each take, so that a
+# rehearsal's records do not sit above the take's and make the replay harder to
+# read. Those rotated copies are local evidence, never repository content.
+audit.log.*
 
 # Personal reference material. Never belongs in this repository.
 .refkit/
