@@ -307,3 +307,28 @@ command that actually ran, when it ran, and what it returned.
 | 2026-09-02T19:58:47Z | PASS | every documented command executed successfully |
 | 2026-09-02T20:00:38Z | PASS | prose guard clean across 39 documents |
 | 2026-09-02T20:00:55Z | PASS | every documented command executed successfully |
+| 2026-09-02T22:07:20Z | PASS | buyer task completed end to end: store 47 ordered, store 102 refused at exactly the threshold, retry deduplicated, store 999 failed closed |
+| 2026-09-02T22:08:00Z | PASS | buyer task completed end to end: store 47 ordered, store 102 refused at exactly the threshold, retry deduplicated, store 999 failed closed |
+| 2026-09-02T22:08:27Z | PASS | tool server completed the handshake and answered real tool calls correctly over the wire |
+| 2026-09-02T22:08:27Z | PASS | demonstration environment came up clean: per-store scoping asserted, handshake and real tool calls answered correctly |
+| 2026-09-02T22:10:34Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T22:10:34Z | PASS | lint, types, compression scope, and prose checks clean |
+| 2026-09-02T22:10:41Z | PASS | full suite green, critical path at or above 90% |
+| 2026-09-02T22:11:12Z | PASS | security sweep clean (gitleaks, bandit, dependency audit) |
+| 2026-09-02T22:11:20Z | PASS | images built in 6806ms |
+| 2026-09-02T22:11:22Z | PASS | images built in 1046ms |
+| 2026-09-02T22:11:34Z | PASS | docker compose stack healthy |
+| 2026-09-02T22:12:06Z | PASS | base image digests pinned in .env.images |
+| 2026-09-02T22:12:14Z | PASS | images built in 7162ms |
+| 2026-09-02T22:12:34Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T22:12:34Z | PASS | lint, types, compression scope, and prose checks clean |
+| 2026-09-02T22:12:42Z | PASS | full suite green, critical path at or above 90% |
+| 2026-09-02T22:13:08Z | PASS | security sweep clean (gitleaks, bandit, dependency audit) |
+| 2026-09-02T22:13:10Z | PASS | images built in 1103ms |
+| 2026-09-02T22:13:12Z | PASS | images built in 968ms |
+| 2026-09-02T22:13:24Z | PASS | docker compose stack healthy |
+| 2026-09-02T22:13:27Z | PASS | smoke test: 11 of 11 checks passed against the running stack |
+| 2026-09-02T22:13:29Z | PASS | tool server completed the handshake and answered real tool calls correctly over the wire |
+| 2026-09-02T22:13:30Z | PASS | prose guard clean across 39 documents |
+| 2026-09-02T22:13:36Z | PASS | every documented command executed successfully |
+| 2026-09-02T22:13:38Z | PASS | full verification sweep completed in 72s (0 stages skipped) |
