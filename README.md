@@ -13,11 +13,11 @@ matter.
 <!-- BEGIN:status -->
 | | |
 | --- | --- |
-| Branch | `fix/demo-client-wrong-directory` |
-| Commit | `055906a` |
+| Branch | `chore/ignore-rotated-audit-trails` |
+| Commit | `393d336` |
 | Tests | 183 |
 | Coverage | 80% |
-| Last verified | 2026-09-02T22:32:12Z |
+| Last verified | 2026-09-02T22:36:13Z |
 
 This table is written by `scripts/update_readme.sh` from what actually ran. It
 is never edited by hand.
