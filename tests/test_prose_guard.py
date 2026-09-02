@@ -44,13 +44,23 @@ def test_ordinary_technical_prose_is_accepted() -> None:
     assert report.ok is True
 
 
+# Directories that contain Markdown belonging to something other than this
+# checkout's own documentation. `.claude` is the one worth naming: Claude Code
+# places git worktrees under `.claude/worktrees`, and a worktree is a complete
+# second copy of this repository. Walking into one makes the test read another
+# checkout's files, including its copy of the deliberately terse fixture below,
+# and the test then fails for a reason that has nothing to do with the
+# documentation being judged.
+_NOT_OUR_DOCUMENTATION = frozenset({".venv", "node_modules", ".claude", ".git"})
+
+
 def test_every_tracked_document_in_this_repository_passes() -> None:
     """The guard is run against the real documentation, not just fixtures."""
     root = Path(__file__).resolve().parents[1]
     documents = [
         path
         for path in root.rglob("*.md")
-        if ".venv" not in path.parts and "node_modules" not in path.parts and path != FIXTURE
+        if not _NOT_OUR_DOCUMENTATION.intersection(path.parts) and path.name != FIXTURE.name
     ]
 
     failures = {
