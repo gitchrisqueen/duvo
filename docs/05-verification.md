@@ -307,3 +307,7 @@ command that actually ran, when it ran, and what it returned.
 | 2026-09-02T19:58:47Z | PASS | every documented command executed successfully |
 | 2026-09-02T20:00:38Z | PASS | prose guard clean across 39 documents |
 | 2026-09-02T20:00:55Z | PASS | every documented command executed successfully |
+| 2026-09-02T22:07:20Z | PASS | buyer task completed end to end: store 47 ordered, store 102 refused at exactly the threshold, retry deduplicated, store 999 failed closed |
+| 2026-09-02T22:08:00Z | PASS | buyer task completed end to end: store 47 ordered, store 102 refused at exactly the threshold, retry deduplicated, store 999 failed closed |
+| 2026-09-02T22:08:27Z | PASS | tool server completed the handshake and answered real tool calls correctly over the wire |
+| 2026-09-02T22:08:27Z | PASS | demonstration environment came up clean: per-store scoping asserted, handshake and real tool calls answered correctly |
