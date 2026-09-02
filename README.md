@@ -13,11 +13,11 @@ matter.
 <!-- BEGIN:status -->
 | | |
 | --- | --- |
-| Branch | `fix/tool-error-reaches-the-caller` |
-| Commit | `0819491` |
+| Branch | `evidence/demo-on-mcp-211` |
+| Commit | `a7935be` |
 | Tests | 183 |
 | Coverage | 80% |
-| Last verified | 2026-09-02T19:55:13Z |
+| Last verified | 2026-09-02T22:13:36Z |
 
 This table is written by `scripts/update_readme.sh` from what actually ran. It
 is never edited by hand.
