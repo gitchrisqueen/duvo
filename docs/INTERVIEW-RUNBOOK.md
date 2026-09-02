@@ -131,6 +131,57 @@ H below.
 Contingency. If you are here with nothing to fix, stop early. Finishing calmly
 reads better than filling time.
 
+## D2. The second round: driving the task from a live assistant
+
+The first round proved the buyer task with `scripts/demo_proof.sh`, which
+asserts every outcome. The second round is a different demonstration: an
+assistant completes the same task through a Model Context Protocol client, so a
+model chooses the tool calls and the interesting moments are the ones where the
+server refuses to let it choose wrongly.
+
+### Before recording, in this order
+
+Three steps, and the order is not optional.
+
+1. **Stop the mock.** `scripts/demo_client.sh` refuses to start while the port
+   is held, so this has to come first.
+2. **Restart the assistant's session.** This is what clears the deduplication
+   store, which is held in process by design. Restarting the mock on its own
+   leaves the tool server still holding the entry, and the first order of the
+   take then reports as a duplicate against a mock that has no order. The
+   deduplication key carries the store's trading date, which protects tomorrow's
+   genuine order and does nothing at all between a rehearsal and a take on the
+   same morning.
+3. **Run `scripts/demo_client.sh` and leave it running.** It brings the mock up
+   with its key directory pointed here rather than at the container path,
+   asserts per-store key scoping over HTTP, completes a handshake, makes real
+   tool calls, and then blocks.
+
+**Within a take, do not reconnect the tool server between beats two and three.**
+The session staying alive is what makes the replay beat possible.
+
+### The five beats
+
+| Beat | What to do | What to say |
+| --- | --- | --- |
+| One | `/mcp`, before any prompt | Three tools, and none of them takes a quantity, a threshold or an override. There is no vocabulary in which this agent could express an order Korral's policy does not permit. That is structural, and a test pins it |
+| Two | Paste the buyer's instruction, verbatim from the brief | The server did the arithmetic and the model reported it. Store 102's gap is exactly six, and the rule says exceeds, so it is refused at the boundary |
+| Three | Ask for the same order again | The order was correct both times. Without the replay flag reaching the report, the spend total a buyer reads is wrong, and the decision they make from it is wrong too. That is a commercial defect, not a technical one |
+| Four | Ask the assistant to check that order's status | StoreLink is the system of record here, not this server. This is also the only tool the scripted demonstration never drives |
+| Five | Ask for store 999, then run `scripts/demo_audit.sh` | It names the one store the caller already named, gives the remediation, and never reveals which other stores have keys. The audit script checks the trail for every key without printing any of their values |
+
+### If it stalls
+
+`scripts/demo_client.sh` prints the rehearsed fallback, which binds a different
+port and therefore runs alongside rather than colliding:
+
+```
+DEMO_PORT=8081 scripts/demo_proof.sh
+```
+
+Neither path needs Docker, so a daemon problem cannot take the demonstration
+down.
+
 ## E. Commands
 
 | Need | Command |
@@ -139,6 +190,8 @@ reads better than filling time.
 | Everything, one verdict | `make verify` |
 | Start the stack | `make up` |
 | Probe the tool server | `scripts/mcp_check.sh` |
+| Bring the stack up for a live assistant | `scripts/demo_client.sh` |
+| Read the audit trail back | `scripts/demo_audit.sh` |
 | Commit with the gate | `scripts/commit.sh "feat(scope): what changed"` |
 | Push and open the pull request | `make ship` |
 | Rehearse the walkthrough | `scripts/walkthrough.sh` |
