@@ -332,3 +332,7 @@ command that actually ran, when it ran, and what it returned.
 | 2026-09-02T22:13:30Z | PASS | prose guard clean across 39 documents |
 | 2026-09-02T22:13:36Z | PASS | every documented command executed successfully |
 | 2026-09-02T22:13:38Z | PASS | full verification sweep completed in 72s (0 stages skipped) |
+| 2026-09-02T22:29:43Z | PASS | tool server completed the handshake and answered real tool calls correctly over the wire |
+| 2026-09-02T22:29:43Z | PASS | demonstration environment came up clean: per-store scoping asserted, handshake and real tool calls answered correctly |
+| 2026-09-02T22:30:15Z | PASS | tool server completed the handshake and answered real tool calls correctly over the wire |
+| 2026-09-02T22:30:15Z | PASS | demonstration environment came up clean: per-store scoping asserted, handshake and real tool calls answered correctly |
