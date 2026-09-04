@@ -73,8 +73,7 @@ store's decision stays individually visible and individually auditable.
 
 | Endpoint | Why not |
 | --- | --- |
-| `GET /v1/stores` | Names no store, so under per-store key scoping there is no principled credential to sign it with. Signing it with some arbitrary store's key would put one store's credential on a request returning data about all of the roughly one hundred and eighty the brief
-describes. Its pagination behaviour is also undocumented. |
+| `GET /v1/stores` | Names no store, so under per-store key scoping there is no principled credential to sign it with. Signing it with some arbitrary store's key would put one store's credential on a request returning data about all of the roughly one hundred and eighty the brief describes. Its pagination behaviour is also undocumented. |
 | `GET /v1/stores/{id}` | Called internally for the store's timezone. Its name and address change no decision and are customer identifying, so nothing from it reaches a model. |
 | `GET /v1/stores/{id}/inventory` | Called internally. Exposed raw it would be a thin proxy inviting the model to do the arithmetic itself. |
 | `GET /v1/stores/{id}/pos` | Called internally. It returns till transactions carrying basket, loyalty, payment and staff detail. Only two integers, the unit total and the row count, cross the boundary. |
@@ -89,8 +88,10 @@ Every quantity field carries its unit in its name: `on_hand_units`,
 and the product name embeds a weight, so a bare `quantity` is how an order comes
 out wrong by a case multiple. No conversion happens anywhere.
 
-Every response carries the threshold that was applied and an `explanation`
-holding the arithmetic in one plain English sentence. The same sentence goes into
+Every stock check and every order response carries the threshold that was
+applied and an `explanation` holding the arithmetic in one plain English
+sentence; the order status response reports StoreLink's status only. The same
+sentence goes into
 the audit trail, so what the buyer reads the next morning and what the agent
 reported are the same words, and a divergence between them is a bug anybody can
 see.
@@ -225,11 +226,12 @@ than a claim.
 This repository was prepared before the exercise brief was opened. It carries a
 personal engineering scaffold: tooling, quality gates, agent definitions, and
 the infrastructure modules listed above. The scaffold commits are dated
-2026-08-17 and 2026-08-18. The task-specific code, its tests, and the documents
-describing it landed in the commits of 2026-08-22, from `a97973b` to `3d48f7b`,
-which by their timestamps span forty two minutes. Two later commits on
-2026-09-02 fixed how a tool error reaches the caller and how the demonstration
-scripts find their checkout. The docs refer to a `pre-brief` tag marking the
+2026-08-17 and 2026-08-18. The domain code under `src/` and its tests landed in
+the commits of 2026-08-22, from `a97973b` to `3d48f7b`, which by their
+timestamps span forty two minutes. Commits on 2026-09-02 then changed `src/`
+and `tests/` twice (`a5ec458`, so a tool error survives the protocol library,
+and `a7935be`, so a test walk skips nested checkouts) and added demonstration
+scripts, probe tooling, and further documents. The docs refer to a `pre-brief` tag marking the
 boundary; that tag has not been pushed to this repository, so use the commit
 dates instead. See
 [docs/00-scaffold-provenance.md](docs/00-scaffold-provenance.md).
