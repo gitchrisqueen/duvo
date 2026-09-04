@@ -13,11 +13,11 @@ matter.
 <!-- BEGIN:status -->
 | | |
 | --- | --- |
-| Branch | `chore/ignore-rotated-audit-trails` |
-| Commit | `393d336` |
+| Branch | `docs/readme-accuracy-2026-09-04` |
+| Commit | `ae7a63a` |
 | Tests | 183 |
 | Coverage | 80% |
-| Last verified | 2026-09-02T22:36:13Z |
+| Last verified | 2026-09-02T22:36:15Z |
 
 This table is written by `scripts/update_readme.sh` from what actually ran. It
 is never edited by hand.
