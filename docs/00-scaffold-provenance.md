@@ -27,8 +27,8 @@ the boundary is read from the history instead:
 
 <!-- verify: skip -->
 ```bash
-git log --oneline 5aa6e1d..HEAD
-git diff --stat 5aa6e1d..HEAD
+git log --oneline 0496897..HEAD
+git diff --stat 0496897..HEAD
 ```
 
 Two commits on 2026-09-02 touched `src/` and `tests/` after the exercise:
@@ -99,4 +99,4 @@ and patterns, and the value they add is judgement about the customer's actual
 problem.
 
 If the exercise intends a genuinely empty starting point, the commit range
-`5aa6e1d..HEAD` makes it straightforward to review only what came after it.
+`0496897..HEAD` makes it straightforward to review only what came after it.
