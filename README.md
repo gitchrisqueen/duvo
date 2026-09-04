@@ -73,12 +73,13 @@ store's decision stays individually visible and individually auditable.
 
 | Endpoint | Why not |
 | --- | --- |
-| `GET /v1/stores` | Names no store, so under per-store key scoping there is no principled credential to sign it with. Signing it with some arbitrary store's key would put one store's credential on a request returning data about all one hundred and eighty. Its pagination behaviour is also undocumented. |
+| `GET /v1/stores` | Names no store, so under per-store key scoping there is no principled credential to sign it with. Signing it with some arbitrary store's key would put one store's credential on a request returning data about all of the roughly one hundred and eighty the brief
+describes. Its pagination behaviour is also undocumented. |
 | `GET /v1/stores/{id}` | Called internally for the store's timezone. Its name and address change no decision and are customer identifying, so nothing from it reaches a model. |
 | `GET /v1/stores/{id}/inventory` | Called internally. Exposed raw it would be a thin proxy inviting the model to do the arithmetic itself. |
 | `GET /v1/stores/{id}/pos` | Called internally. It returns till transactions carrying basket, loyalty, payment and staff detail. Only two integers, the unit total and the row count, cross the boundary. |
-| `GET /v1/skus/{sku}` | Called internally for the display name. As a tool it would be a catalogue browsing surface over eighteen thousand products with no store context. |
-| `GET /v1/suppliers/{id}` | Called internally. Lead time is returned as context and never enters the trigger arithmetic; exposed as its own tool it invites a model to reason that a long lead time justifies ordering early, which would be a caller modifying a stated rule. |
+| `GET /v1/skus/{sku}` | Called internally for the display name. As a tool it would be a catalogue browsing surface over roughly eighteen thousand products with no store context. |
+| `GET /v1/suppliers/{id}` | The client has a method for it, but the service never calls it and no response carries lead time. Exposed as its own tool it would invite a model to reason that a long lead time justifies ordering early, which would be a caller modifying a stated rule. |
 
 ### Shapes and naming
 
@@ -210,7 +211,7 @@ uv run python -m tools.prose_guard README.md DEPLOYMENT.md CLAUDE.md
 | Command | What it does |
 | --- | --- |
 | `make setup` | Install dependencies and git hooks. Run once. |
-| `make test` | Fast suite. Stays under five seconds by construction. |
+| `make test` | Fast suite. Budgeted at ten seconds; `scripts/test.sh` and continuous integration fail it if it goes over. |
 | `make lint` | Format, lint, types, and check that the documentation reads as English. |
 | `make sec` | Secret scan, static analysis, dependency audit. |
 | `make verify` | Everything, one verdict. Run before every push. |
@@ -223,7 +224,12 @@ than a claim.
 
 This repository was prepared before the exercise brief was opened. It carries a
 personal engineering scaffold: tooling, quality gates, agent definitions, and
-the infrastructure modules listed above. Every line of task-specific code was
-written during the recorded hour. The commit tagged `pre-brief` marks the
-boundary, so the split is auditable rather than something you have to take on
-trust. See [docs/00-scaffold-provenance.md](docs/00-scaffold-provenance.md).
+the infrastructure modules listed above. The scaffold commits are dated
+2026-08-17 and 2026-08-18. The task-specific code, its tests, and the documents
+describing it landed in the commits of 2026-08-22, from `a97973b` to `3d48f7b`,
+which by their timestamps span forty two minutes. Two later commits on
+2026-09-02 fixed how a tool error reaches the caller and how the demonstration
+scripts find their checkout. The docs refer to a `pre-brief` tag marking the
+boundary; that tag has not been pushed to this repository, so use the commit
+dates instead. See
+[docs/00-scaffold-provenance.md](docs/00-scaffold-provenance.md).

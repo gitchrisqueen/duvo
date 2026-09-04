@@ -20,20 +20,28 @@ itself lives, was deliberately left empty.
 ## What was written during the recorded hour
 
 Every line of task-specific code, every test covering it, and every document
-describing it. The commit tagged `pre-brief` marks the boundary exactly:
+describing it. The scaffold commits are dated 2026-08-17 and 2026-08-18, and the
+task-specific commits begin with `a97973b` on 2026-08-22. A `pre-brief` tag was
+meant to mark the boundary, but it has not been pushed to this repository, so
+the boundary is read from the history instead:
 
 <!-- verify: skip -->
 ```bash
-git log --oneline pre-brief..HEAD
-git diff --stat pre-brief..HEAD
+git log --oneline 5aa6e1d..HEAD
+git diff --stat 5aa6e1d..HEAD
 ```
+
+Two commits on 2026-09-02 touched `src/` after the exercise: one to make a tool
+error survive the protocol library, one to stop the documentation walk reading
+a second checkout.
 
 ## Why this is stated up front
 
 Two reasons, and the second matters more than the first.
 
 The first is fairness. A reviewer inspecting the commit history should not have
-to work out which parts predate the brief. The tag makes it a single command.
+to work out which parts predate the brief. The commit range makes it a single
+command.
 
 The second is that hiding it would be the same failure this exercise is designed
 to catch. A submission that quietly presents prepared work as though it were
