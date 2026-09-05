@@ -17,23 +17,31 @@ personal engineering scaffold that I bring to any project:
 None of it is specific to the task. `src/duvo_fde/domain/`, where the task
 itself lives, was deliberately left empty.
 
-## What was written during the recorded hour
+## What was written after the brief was opened
 
-Every line of task-specific code, every test covering it, and every document
-describing it. The commit tagged `pre-brief` marks the boundary exactly:
+The domain code, its tests, and the first drafts of the documents describing
+it. The scaffold commits are dated 2026-08-17 and 2026-08-18, and the
+task-specific commits begin with `a97973b` on 2026-08-22. A `pre-brief` tag was
+meant to mark the boundary, but it has not been pushed to this repository, so
+the boundary is read from the history instead:
 
 <!-- verify: skip -->
 ```bash
-git log --oneline pre-brief..HEAD
-git diff --stat pre-brief..HEAD
+git log --oneline 0496897..HEAD
+git diff --stat 0496897..HEAD
 ```
+
+Two commits on 2026-09-02 touched `src/` and `tests/` after the exercise:
+`a5ec458` to make a tool error survive the protocol library, and `a7935be`
+(tests only) to stop the documentation walk reading a second checkout.
 
 ## Why this is stated up front
 
 Two reasons, and the second matters more than the first.
 
 The first is fairness. A reviewer inspecting the commit history should not have
-to work out which parts predate the brief. The tag makes it a single command.
+to work out which parts predate the brief. The commit range makes it a single
+command.
 
 The second is that hiding it would be the same failure this exercise is designed
 to catch. A submission that quietly presents prepared work as though it were
@@ -90,5 +98,5 @@ at a customer does not start from an empty directory. They arrive with tooling
 and patterns, and the value they add is judgement about the customer's actual
 problem.
 
-If the exercise intends a genuinely empty starting point, the tag makes it
-straightforward to review only what came after it.
+If the exercise intends a genuinely empty starting point, the commit range
+`0496897..HEAD` makes it straightforward to review only what came after it.
