@@ -160,10 +160,10 @@ that, ignore it entirely. Nothing is ever copied in wholesale; patterns are
 adapted and understood. Reference paths are excluded by `.gitignore` and checked
 again by `scripts/finalize.sh` before anything is published.
 
-## Learned from previous submissions
+## Failure modes already handled
 
-These are real findings from prior candidates, and each one is already handled
-in this scaffold. Do not undo them.
+These are failure modes this scaffold is designed to prevent, and each one is
+already handled. Do not undo them.
 
 - Deduplication that worked, but whose replay flag was dropped before the
   reporting layer, so retries inflated reported spend. See `idempotency.py`.
