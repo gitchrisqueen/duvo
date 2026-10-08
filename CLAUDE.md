@@ -107,7 +107,7 @@ has cost more than it returned. Adversarial passes are capped at eight to ten
 findings.
 
 Hooks are advisory, one-shot, and guarded by sentinels so they cannot loop.
-`INTERVIEW_KILL_HOOKS=1` disables all of them.
+Set `INTERVIEW_KILL_HOOKS=1` to turn the hooks off for local debugging.
 
 ## Commands
 
@@ -154,11 +154,10 @@ Domain code lives in `src/duvo_fde/domain/`; `policy.py` holds the replenishment
 
 ## Reference material
 
-A personal pattern library may exist outside this repository. It is consulted
-only if `brief-analyst` reports a match of seventy per cent or higher. Below
-that, ignore it entirely. Nothing is ever copied in wholesale; patterns are
-adapted and understood. Reference paths are excluded by `.gitignore` and checked
-again by `scripts/finalize.sh` before anything is published.
+The author keeps a personal library of past design patterns outside this
+repository. It is consulted only if `brief-analyst` reports a match of seventy
+per cent or higher. Nothing from it is copied into this repository; any pattern
+used is rewritten here and covered by this repository's own tests.
 
 ## Failure modes already handled
 
@@ -174,10 +173,11 @@ already handled. Do not undo them.
 - A key rotation that appeared to work but was never observed inside the
   container, because a single file was mounted rather than the directory. See
   `secrets_provider.py`.
-- A submission whose main path failed on real data because it read a field the
-  upstream never returned, and whose image would not build.
-- Documentation describing features that did not exist, an audit log that was
-  never wired up, and secrets committed alongside a virtual environment.
+- A main path that fails on real data because it reads a field the upstream
+  never returns, in an image that does not build. See `fixtures/upstream.json`.
+- Documentation that describes features that do not exist, an audit log that is
+  never wired up, and secrets committed alongside a virtual environment. See
+  `scripts/verify_docs.sh`.
 
 ## Tone on camera
 
