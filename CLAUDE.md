@@ -157,7 +157,7 @@ Domain code lives in `src/duvo_fde/domain/`; `policy.py` holds the replenishment
 The author keeps a personal library of past design patterns outside this
 repository. It is consulted only if `brief-analyst` reports a match of seventy
 per cent or higher. Nothing from it is copied into this repository; any pattern
-used is rewritten here and covered by this repository's own tests.
+used is rewritten here.
 
 ## Failure modes already handled
 
