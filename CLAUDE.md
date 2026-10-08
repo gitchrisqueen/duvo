@@ -154,10 +154,11 @@ Domain code lives in `src/duvo_fde/domain/`; `policy.py` holds the replenishment
 
 ## Reference material
 
-The author keeps a personal library of past design patterns outside this
+The author keeps a personal reference kit of past design patterns outside this
 repository. It is consulted only if `brief-analyst` reports a match of seventy
-per cent or higher. Nothing from it is copied into this repository; any pattern
-used is rewritten here.
+per cent or higher. Do not copy from it; rewrite any pattern used. Reference
+paths are excluded by `.gitignore` and checked again by `scripts/finalize.sh`
+before anything is published.
 
 ## Failure modes already handled
 
@@ -174,10 +175,13 @@ already handled. Do not undo them.
   container, because a single file was mounted rather than the directory. See
   `secrets_provider.py`.
 - A main path that fails on real data because it reads a field the upstream
-  never returns, in an image that does not build. See `fixtures/upstream.json`.
-- Documentation that describes features that do not exist, an audit log that is
-  never wired up, and secrets committed alongside a virtual environment. See
-  `scripts/verify_docs.sh`.
+  never returns (`fixtures/upstream.json` holds only documented fields), in an
+  image that does not build (the CI job "image builds and the stack actually
+  works" builds and smoke-tests it).
+- An audit log that is configured but never wired up
+  (`tests/test_audit.py::test_the_runtime_wires_the_audit_log_to_a_real_path`),
+  and secrets committed alongside a virtual environment (`.gitignore` plus the
+  history and tracked-secrets checks in `scripts/finalize.sh`).
 
 ## Tone on camera
 
