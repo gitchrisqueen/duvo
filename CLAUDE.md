@@ -150,7 +150,7 @@ place that difference is observable, and it has caught a real one.
 - `errors.py` — typed errors with messages safe to return to a caller
 - `runtime.py` — the composition root
 
-Domain code goes in `src/duvo_fde/domain/`, which is deliberately empty.
+Domain code lives in `src/duvo_fde/domain/`; `policy.py` holds the replenishment rule.
 
 ## Reference material
 
